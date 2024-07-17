@@ -162,6 +162,7 @@ public class CustomerOrderAggregateStream {
                 .withKeySerde(STRING_SERDE)
                 .withValueSerde(ITEM_RECORD_ARRAYLIST_SERDE));
 
+        // Print KTable
         itemListKTable.toStream().foreach((key, value) -> log.info("Item List KTable :: Key {} :: Value {}.", key, value));
 
         return itemListKTable;
