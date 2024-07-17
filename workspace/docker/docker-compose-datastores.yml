@@ -1,0 +1,85 @@
+networks:
+  datastores:
+    name: datastores
+
+services:
+
+# DATASOURCES FOR PLATFORM
+  mysql_db_server:
+    image: mysql:8.0.31
+    container_name: mysql_db_server
+    hostname: mysql_db_server
+    networks:
+      - datastores
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: order-command-db
+      MYSQL_USER: order-command-user
+      MYSQL_PASSWORD: password
+    ports:
+      - 13306:3306
+      - 33060:33060
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - mysql_db_data_container:/var/lib/mysql
+    healthcheck:
+      test: "mysqladmin ping -u root -p$${MYSQL_ROOT_PASSWORD}"
+
+  adminer_client:
+    image: adminer:4.8.1-standalone
+    container_name: adminer_client
+    hostname: adminer_client
+    networks:
+      - datastores
+    restart: always
+    depends_on:
+      - mysql_db_server
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql_db_server
+    ports:
+      - 8180:8080
+
+  mongodb_server:
+    image: mongo:5.0.13
+    container_name: mongodb_server
+    hostname: mongodb_server
+    networks:
+      - datastores
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo-user
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongodb_data_container:/data/mongodb
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongodb_server:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+  
+  mongo-express:
+    image: mongo-express:0.54.0
+    container_name: mongodb_express
+    hostname: mongodb_express
+    networks:
+      - datastores
+    restart: always
+    depends_on:
+      - mongodb_server
+    ports:
+      - 8181:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=mongo-user
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongodb_server
+      
+
+# VOLUMES for Platform Datastores
+volumes:
+  mongodb_data_container:
+  mysql_db_data_container:

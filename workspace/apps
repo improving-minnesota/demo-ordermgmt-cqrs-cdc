@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#~ START functions -----------------------------------------------------------------------
+echoCommands() {
+  echo ""
+	echo "Usage:  These are valid commands"
+  echo "apps start"
+  echo "apps stop"
+  echo ""
+}
+
+startApps() {
+  docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d
+}
+
+stopApps() {
+  docker compose --file ./docker/docker-compose-apps.yml --project-name apps down -v
+}
+
+#~ END functions ---------------------------------------------------------------------------
+
+
+#~ main body of the script --------------------------------------------------------------------
+if [ $# -eq 0 ]; then
+    echoCommands
+    exit -1
+elif [ $1 == "start" ]; then
+		startApps
+elif [ $1 == "stop" ]; then
+		stopApps
+else
+	echo "\nERROR:  See command usage\n"
+	echoCommands
+fi
+#~ END OF FILE --------------------------------------------------------------------------------

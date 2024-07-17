@@ -1,0 +1,268 @@
+{
+	"info": {
+		"_postman_id": "47137153-e256-49eb-bdcd-8810f8c50cde",
+		"name": "UC: Order Mgmt CQRS (DDD-CDC)",
+		"description": "Based off the excellent article at: [https://debezium.io/blog/2023/02/04/ddd-aggregates-via-cdc-cqrs-pipeline-using-kafka-and-debezium/.]()\n\n---\n\n[Workspace]() and documentation can be found locally at:\n\n\\~/Developer/projects/play/usecases/ddd-aggregate-cdc-cqrs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9857394"
+	},
+	"item": [
+		{
+			"name": "Order Command API",
+			"item": [
+				{
+					"name": "Shipping Details",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"8ff7f2cf-9b65-412b-a161-3a40ab2a89b1\",\n    \"customerName\": \"John Doe\",\n    \"customerAddress\": \"104 Rising Sun Rd\",\n    \"zipCode\": \"08505\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/shipping-details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"shipping-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order Item Details",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"\",\n    \n    \"items\": [\n        {\n            \"itemId\": \"I001\",\n            \"itemName\": \"Laptop\",\n            \"price\": 500,\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"I002\",\n            \"itemName\": \"Handbag\",\n            \"price\": 300,\n            \"quantity\": 2\n        },\n        {\n            \"itemId\": \"I003\",\n            \"itemName\": \"Book\",\n            \"price\": 100,\n            \"quantity\": 3\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/item-details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"item-details"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order Query API",
+			"item": [
+				{
+					"name": "Order By Order Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders/8ff7f2cf-9b65-412b-a161-3a40ab2a89b1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders",
+								"8ff7f2cf-9b65-412b-a161-3a40ab2a89b1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Connector-Debezium-CDC",
+			"item": [
+				{
+					"name": "MySQL CDC Connector Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/connectors/order-command-db-connector/status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"connectors",
+								"order-command-db-connector",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create MySQL CDC Connector",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"order-command-db-connector\",\n    \"config\": {\n        \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\n        \"tasks.max\": \"1\",\n        \"database.hostname\": \"mysql_db_server\",\n        \"database.port\": \"3306\",\n        \"database.user\": \"order-command-user\",\n        \"database.password\": \"password\",\n        \"database.server.id\": \"142401\",\n        \"database.server.name\": \"order-command-server\",\n        \"database.whitelist\": \"order-command-db\",\n        \"table.whitelist\": \"order-command-db.shipping_details,order-command-db.item_details\",\n        \"database.history.kafka.bootstrap.servers\": \"kafka:29092\",\n        \"database.history.kafka.topic\": \"dbhistory.order-command-db\",\n        \"include.schema.changes\": \"true\",\n        \"transforms\": \"unwrap\",\n        \"transforms.unwrap.type\": \"io.debezium.transforms.ExtractNewRecordState\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/connectors/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"connectors",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete MySQL CDC Connector",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"order-command-db-connector\",\n    \"config\": {\n        \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\n        \"tasks.max\": \"1\",\n        \"database.hostname\": \"mysql_db_server\",\n        \"database.port\": \"3306\",\n        \"database.user\": \"order-command-user\",\n        \"database.password\": \"password\",\n        \"database.server.id\": \"142401\",\n        \"database.server.name\": \"order-command-server\",\n        \"database.whitelist\": \"order-command-db\",\n        \"table.whitelist\": \"order-command-db.shipping_details,order-command-db.item_details\",\n        \"database.history.kafka.bootstrap.servers\": \"broker:29092\",\n        \"database.history.kafka.topic\": \"dbhistory.order-command-db\",\n        \"include.schema.changes\": \"true\",\n        \"transforms\": \"unwrap\",\n        \"transforms.unwrap.type\": \"io.debezium.transforms.ExtractNewRecordState\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/connectors/order-command-db-connector",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"connectors",
+								"order-command-db-connector"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Connector-MongoDB-Sink",
+			"item": [
+				{
+					"name": "MongoDB Connector Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/connectors/order-app-mongo-sink-connector/status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"connectors",
+								"order-app-mongo-sink-connector",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create MongoDB Sink Connector",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"order-app-mongo-sink-connector\",\n    \"config\": {\n        \"connector.class\": \"com.mongodb.kafka.connect.MongoSinkConnector\",\n        \"topics\": \"order-aggregate\",\n        \"connection.uri\": \"mongodb://mongo-user:password@mongodb_server:27017\",\n        \"key.converter\": \"org.apache.kafka.connect.storage.StringConverter\",\n        \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n        \"value.converter.schemas.enable\": false,\n        \"database\": \"order_db\",\n        \"collection\": \"order\",\n        \"document.id.strategy.overwrite.existing\": \"true\",\n        \"document.id.strategy\": \"com.mongodb.kafka.connect.sink.processor.id.strategy.ProvidedInKeyStrategy\",\n        \"transforms\": \"hk,hv\",\n        \"transforms.hk.type\": \"org.apache.kafka.connect.transforms.HoistField$Key\",\n        \"transforms.hk.field\": \"_id\",\n        \"transforms.hv.type\": \"org.apache.kafka.connect.transforms.HoistField$Value\",\n        \"transforms.hv.field\": \"order\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/connectors/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"connectors",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete MySQL CDC Connector Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"order-command-db-connector\",\n    \"config\": {\n        \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\n        \"tasks.max\": \"1\",\n        \"database.hostname\": \"mysql_db_server\",\n        \"database.port\": \"3306\",\n        \"database.user\": \"order-command-user\",\n        \"database.password\": \"password\",\n        \"database.server.id\": \"142401\",\n        \"database.server.name\": \"order-command-server\",\n        \"database.whitelist\": \"order-command-db\",\n        \"table.whitelist\": \"order-command-db.shipping_details,order-command-db.item_details\",\n        \"database.history.kafka.bootstrap.servers\": \"broker:29092\",\n        \"database.history.kafka.topic\": \"dbhistory.order-command-db\",\n        \"include.schema.changes\": \"true\",\n        \"transforms\": \"unwrap\",\n        \"transforms.unwrap.type\": \"io.debezium.transforms.ExtractNewRecordState\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/connectors/order-app-mongo-sink-connector",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"connectors",
+								"order-app-mongo-sink-connector"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

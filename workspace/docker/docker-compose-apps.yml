@@ -1,0 +1,71 @@
+networks:
+  apps:
+    name: apps
+  datastreaming:
+    name: datastreaming
+  datastores:
+    name: datastores
+
+services:
+  snack-order-commands:
+    container_name: snack-order-commands
+    image: tlapps/play/snack-order-commands:snapshot
+    networks:
+      - apps
+      - datastores
+
+    healthcheck:
+      interval: 5s
+      timeout: 20s
+      retries: 360
+      start_period: 30s
+
+    ports:
+      - "8800:8800"
+      - "8000:8000" # Remote Debugging Port
+    environment:
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000
+      - LOGGING_FILE_NAME=/var/log/app.log
+      - SPRING_PROFILES_ACTIVE=local-docker
+
+  snack-order-processor:
+    container_name: snack-order-processor
+    image: tlapps/play/snack-order-processor:snapshot
+    networks:
+      - apps
+      - datastreaming
+
+    healthcheck:
+      interval: 5s
+      timeout: 20s
+      retries: 360
+      start_period: 30s
+
+    ports:
+      - "8801:8801"
+      - "8001:8000" # Remote Debugging Port
+    environment:
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000
+      - LOGGING_FILE_NAME=/var/log/app.log
+      - SPRING_PROFILES_ACTIVE=local-docker
+
+  snack-customer-orders:
+    container_name: snack-customer-orders
+    image: tlapps/play/snack-customer-orders:snapshot
+    networks:
+      - apps
+      - datastores
+
+    healthcheck:
+      interval: 5s
+      timeout: 20s
+      retries: 360
+      start_period: 30s
+
+    ports:
+      - "8802:8802"
+      - "8002:8000" # Remote Debugging Port
+    environment:
+      - JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000
+      - LOGGING_FILE_NAME=/var/log/app.log
+      - SPRING_PROFILES_ACTIVE=local-docker

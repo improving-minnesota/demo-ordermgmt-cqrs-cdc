@@ -1,0 +1,506 @@
+{
+	"info": {
+		"_postman_id": "b975ad8b-7788-4d62-a13e-966c93effc81",
+		"name": "UC: Snacks Unlimited",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9857394"
+	},
+	"item": [
+		{
+			"name": "Kafka-Connectors",
+			"item": [
+				{
+					"name": "Source: MySQL",
+					"item": [
+						{
+							"name": "MySQL CDC Connector Status",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/connectors/order-command-db-connector/status",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"connectors",
+										"order-command-db-connector",
+										"status"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create MySQL CDC Connector",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"order-command-db-connector\",\n    \"config\": {\n        \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\n        \"tasks.max\": \"1\",\n        \"topic.prefix\": \"order-command-server\",\n        \"database.hostname\": \"mysql_db_server\",\n        \"database.port\": \"3306\",\n        \"database.user\": \"order-command-user\",\n        \"database.password\": \"password\",\n        \"database.server.id\": \"142401\",\n        \"database.server.name\": \"order-command-server\",\n        \"database.whitelist\": \"order-command-db\",\n        \"table.whitelist\": \"order-command-db.payment, order-command-db.shipping_location,order-command-db.item_detail\",\n        \"schema.history.internal.kafka.bootstrap.servers\": \"broker:29092\",\n        \"schema.history.internal.kafka.topic\": \"dbhistory.order-command-db\",\n        \"include.schema.changes\": \"true\",\n        \"transforms\": \"unwrap\",\n        \"transforms.unwrap.type\": \"io.debezium.transforms.ExtractNewRecordState\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/connectors/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"connectors",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete MySQL CDC Connector",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"order-command-db-connector\",\n    \"config\": {\n        \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\n        \"tasks.max\": \"1\",\n        \"database.hostname\": \"mysql_db_server\",\n        \"database.port\": \"3306\",\n        \"database.user\": \"order-command-user\",\n        \"database.password\": \"password\",\n        \"database.server.id\": \"142401\",\n        \"database.server.name\": \"order-command-server\",\n        \"database.whitelist\": \"order-command-db\",\n        \"table.whitelist\": \"order-command-db.shipping_details,order-command-db.item_details\",\n        \"database.history.kafka.bootstrap.servers\": \"broker:29092\",\n        \"database.history.kafka.topic\": \"dbhistory.order-command-db\",\n        \"include.schema.changes\": \"true\",\n        \"transforms\": \"unwrap\",\n        \"transforms.unwrap.type\": \"io.debezium.transforms.ExtractNewRecordState\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/connectors/order-command-db-connector",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"connectors",
+										"order-command-db-connector"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Sink: MongoDB",
+					"item": [
+						{
+							"name": "MongoDB Connector Status",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/connectors/order-app-mongo-sink-connector/status",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"connectors",
+										"order-app-mongo-sink-connector",
+										"status"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create MongoDB Sink Connector",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"order-app-mongo-sink-connector\",\n    \"config\": {\n        \"connector.class\": \"com.mongodb.kafka.connect.MongoSinkConnector\",\n        \"topics\": \"customer-order-aggregate\",\n        \"connection.uri\": \"mongodb://mongo-user:password@mongodb_server:27017\",\n        \"key.converter\": \"org.apache.kafka.connect.storage.StringConverter\",\n        \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n        \"value.converter.schemas.enable\": false,\n        \"database\": \"customer_order_db\",\n        \"collection\": \"customerOrder\",\n        \"document.id.strategy.overwrite.existing\": \"true\",\n        \"document.id.strategy\": \"com.mongodb.kafka.connect.sink.processor.id.strategy.ProvidedInKeyStrategy\",\n        \"transforms\": \"hk,hv\",\n        \"transforms.hk.type\": \"org.apache.kafka.connect.transforms.HoistField$Key\",\n        \"transforms.hk.field\": \"_id\",\n        \"transforms.hv.type\": \"org.apache.kafka.connect.transforms.HoistField$Value\",\n        \"transforms.hv.field\": \"customerOrder\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/connectors/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"connectors",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete MySQL CDC Connector",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"order-command-db-connector\",\n    \"config\": {\n        \"connector.class\": \"io.debezium.connector.mysql.MySqlConnector\",\n        \"tasks.max\": \"1\",\n        \"database.hostname\": \"mysql_db_server\",\n        \"database.port\": \"3306\",\n        \"database.user\": \"order-command-user\",\n        \"database.password\": \"password\",\n        \"database.server.id\": \"142401\",\n        \"database.server.name\": \"order-command-server\",\n        \"database.whitelist\": \"order-command-db\",\n        \"table.whitelist\": \"order-command-db.shipping_details,order-command-db.item_details\",\n        \"database.history.kafka.bootstrap.servers\": \"broker:29092\",\n        \"database.history.kafka.topic\": \"dbhistory.order-command-db\",\n        \"include.schema.changes\": \"true\",\n        \"transforms\": \"unwrap\",\n        \"transforms.unwrap.type\": \"io.debezium.transforms.ExtractNewRecordState\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8083/connectors/order-app-mongo-sink-connector",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"connectors",
+										"order-app-mongo-sink-connector"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Snack Order Commands",
+			"item": [
+				{
+					"name": "Order Item Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set('cqrs-orderId', pm.response.json().orderId)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"\",\n    \n    \"items\": [\n        {\n            \"itemId\": \"1\",\n            \"itemName\": \"Cheez-It\",\n            \"price\": 0.01,\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"2\",\n            \"itemName\": \"Veggie Sticks\",\n            \"price\": 0.01,\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"3\",\n            \"itemName\": \"Pretzels\",\n            \"price\": 0.01,\n            \"quantity\": 1\n        },\n        {\n            \"itemId\": \"4\",\n            \"itemName\": \"Fruit Snacks\",\n            \"price\": 0.01,\n            \"quantity\": 1\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/item-details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"item-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Shipping Location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"{{cqrs-orderId}}\",\n    \"customerName\": \"Torey Lomenda\",\n    \"customerAddress\": \"104 Rising Sun Rd\",\n    \"zipCode\": \"08505\",\n    \"latitude\": 40.7127281,\n    \"longitude\": -74.0060152\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/shipping-location",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"shipping-location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"{{cqrs-orderId}}\",\n    \"paymentType\": \"Credit Card\",\n    \"creditCardType\": \"Visa\",\n    \"creditCardNumber\": \"1111-2222-3333-4444\",\n    \"amount\": 0.04\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/payment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order Fullfillment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"{{cqrs-orderId}}\",\n    \"itemStatus\": \"FULFILLED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/item-details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"item-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order Shipment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"{{cqrs-orderId}}\",\n    \"itemStatus\": \"SHIPPED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8800/api/item-details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"item-details"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Snack Customer Orders",
+			"item": [
+				{
+					"name": "Customer Order By Order Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders/{{cqrs-orderId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders",
+								"{{cqrs-orderId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PENDING Customer Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders?status=PENDING",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "PENDING"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PAID Customer Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders?status=PAID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "PAID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FULFILLED Customer Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders?status=FULFILLED",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "FULFILLED"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHIPPED Customer Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders?status=SHIPPED",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "SHIPPED"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Snack Order Processor",
+			"item": [
+				{
+					"name": "Streams Topology",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8801/api/topology",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8801",
+							"path": [
+								"api",
+								"topology"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "cqrs-orderId",
+			"value": ""
+		}
+	]
+}

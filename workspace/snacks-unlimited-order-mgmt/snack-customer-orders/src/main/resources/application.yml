@@ -1,0 +1,28 @@
+server:
+  port: 8802
+
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      username: mongo-user
+      password: password
+      database: customer_order_db
+      port: 27017
+      host: localhost
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local-docker
+
+  data:
+    mongodb:
+      host: mongodb_server
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local-embedded

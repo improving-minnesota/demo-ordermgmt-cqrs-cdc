@@ -1,0 +1,39 @@
+server:
+  port: 8801
+
+spring:
+  # Apache Kafka Configurations
+  kafka:
+    bootstrap-servers: localhost:9092
+    streams:
+      application-id: order-app-id
+      input:
+        # Apache Kafka Topic Names
+        item-detail:
+          topic-name: order-command-server.order-command-db.item_detail
+        shipping-location:
+          topic-name: order-command-server.order-command-db.shipping_location
+        payment:
+          topic-name: order-command-server.order-command-db.payment
+        customer-order-aggregate:
+          topic-name: customer-order-aggregate
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+---
+spring:
+  config:
+    activate:
+      on-profile: local-docker
+
+  kafka:
+    bootstrap-servers: broker:29092
+
+---
+spring:
+  config:
+    activate:
+      on-profile: embedded-docker
