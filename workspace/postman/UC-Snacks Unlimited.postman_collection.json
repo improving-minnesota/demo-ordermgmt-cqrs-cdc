@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "b975ad8b-7788-4d62-a13e-966c93effc81",
-		"name": "UC: Snacks Unlimited",
+		"name": "UC: Snacks Unlimited (DDD-CQRS-CDC)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "9857394"
 	},
@@ -283,6 +283,64 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Order Fullfillment",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderId\": \"{{orderId-brady}}\",\n    \"itemStatus\": \"FULFILLED\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8800/api/item-details",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8800",
+									"path": [
+										"api",
+										"item-details"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order Shipment",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderId\": \"{{orderId-brady}}\",\n    \"itemStatus\": \"SHIPPED\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8800/api/item-details",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8800",
+									"path": [
+										"api",
+										"item-details"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -383,6 +441,64 @@
 									"path": [
 										"api",
 										"payment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order Fullfillment",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderId\": \"{{orderId-oakley}}\",\n    \"itemStatus\": \"FULFILLED\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8800/api/item-details",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8800",
+									"path": [
+										"api",
+										"item-details"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order Shipment",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderId\": \"{{orderId-oakley}}\",\n    \"itemStatus\": \"SHIPPED\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8800/api/item-details",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8800",
+									"path": [
+										"api",
+										"item-details"
 									]
 								}
 							},
@@ -491,66 +607,66 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Order Fullfillment",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderId\": \"{{orderId-rylan}}\",\n    \"itemStatus\": \"FULFILLED\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8800/api/item-details",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8800",
+									"path": [
+										"api",
+										"item-details"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order Shipment",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderId\": \"{{orderId-rylan}}\",\n    \"itemStatus\": \"SHIPPED\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8800/api/item-details",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8800",
+									"path": [
+										"api",
+										"item-details"
+									]
+								}
+							},
+							"response": []
 						}
 					]
-				},
-				{
-					"name": "Order Fullfillment",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"orderId\": \"192e0069-1140-4a23-941a-c483227646ff\",\n    \"itemStatus\": \"FULFILLED\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8800/api/item-details",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8800",
-							"path": [
-								"api",
-								"item-details"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Order Shipment",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"orderId\": \"192e0069-1140-4a23-941a-c483227646ff\",\n    \"itemStatus\": \"SHIPPED\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8800/api/item-details",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8800",
-							"path": [
-								"api",
-								"item-details"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -558,12 +674,12 @@
 			"name": "Snack Customer Orders",
 			"item": [
 				{
-					"name": "Customer Order By Order Id",
+					"name": "Brady's Order",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8802/api/orders/{{cqrs-orderId}}",
+							"raw": "http://localhost:8802/api/orders/{{orderId-brady}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -572,7 +688,49 @@
 							"path": [
 								"api",
 								"orders",
-								"{{cqrs-orderId}}"
+								"{{orderId-brady}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Oakley's Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders/{{orderId-oakley}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders",
+								"{{orderId-oakley}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rylan's Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders/{{orderId-rylan}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders",
+								"{{orderId-rylan}}"
 							]
 						}
 					},
