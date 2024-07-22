@@ -3,6 +3,7 @@
 <!-- code_chunk_output -->
 
 - [Playground - DDD Aggregates w/ CDC and CQRS](#playground---ddd-aggregates-w-cdc-and-cqrs)
+  - [References](#references)
   - [The Story](#the-story)
   - [Solution](#solution)
   - [Playground Environment](#playground-environment)
@@ -16,9 +17,33 @@
 
 # Playground - DDD Aggregates w/ CDC and CQRS
 
+## References
+
+* Source Material
+  * [Original Tutorial – Building DDD Aggregates via CQRS/CDC](https://debezium.io/blog/2023/02/04/ddd-aggregates-via-cdc-cqrs-pipeline-using-kafka-and-debezium/)
+* Telling the Story - Methods
+  * [Domain Storytelling](https://domainstorytelling.org/)
+  * [Event Modeling - Blueprinting](https://eventmodeling.org/)
+  * [Event Storming](https://www.eventstorming.com/)
+  * [User Story Mapping](https://jpattonassociates.com/story-mapping/)
+  * [Use Case Modeling](https://www.amazon.com/Use-Case-Modeling-Kurt-Bittner/dp/0201709139)
+* Solutioning
+  * [Learning Domain-Driven Design](https://www.oreilly.com/library/view/learning-domain-driven-design/9781098100124/)
+  * [C4 - Modeling (Arch)](https://c4model.com/)
+  * [4+1 Architecture View Model](https://en.wikipedia.org/wiki/4%2B1_architectural_view_model)
+* Development
+  * [Kafka Streams in Action, Second Edition](https://www.manning.com/books/kafka-streams-in-action-second-edition)
+  * [Mastering Kafka Streams and ksqlDB](https://www.oreilly.com/library/view/mastering-kafka-streams/9781492062486/)
+  * [Spring Modulith](https://spring.io/projects/spring-modulith)
+
+
 ## The Story
 
-Snacks Unlimited Order Management System.
+Snacks Unlimited Order Management System. 
+
+Below is a break down of a fictitious but relatable problem and the solution journey to building a scalable, flexible system
+using CQRS with CDC and Kadka.
+
 
 ### Problem
 
