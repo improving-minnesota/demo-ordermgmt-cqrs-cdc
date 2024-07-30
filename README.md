@@ -17,6 +17,31 @@
 
 # Playground - DDD Aggregates w/ CDC and CQRS
 
+This repository is packed with concepts, drawings, slides, and code related to a 
+working "playground" building DDD Aggregates via a CDC-CQRS data stream.
+
+The [Presentation Slides](./docs/slides/improvingU-DDD-Aggregates-CQRS-CDC-Kafka.pptx) outline a solution journey
+from story (requirements) to solution (architecture & design) to code. The goal of this demo is to 
+give _context to code_ and provide a pragmatic approach for designing sofware using
+DDD as a key driver.
+
+This demo highlights a CDC-CQRS pipeline between a normalized relational database, MySQL, as the command database and a de-normalized NoSQL database, MongoDB, as the query database resulting in the creation of DDD Aggregates via Debezium & Kafka-Streams.
+
+The [Snacks Unlimited "Store" source code](./workspace/snacks-unlimited-order-mgmt) is centered around three microservices: 
+* snack-order-commands
+* snack-order-processor
+* snack-customer-orders. 
+
+These services are implemented as Spring-Boot applications in Java.
+The `snack-order-commands` exposes API REST endpoints which persist item-details, shipping-info, and payment in their respective tables on MySQL database. 
+
+Debezium tails the MySQL bin logs to capture any events in both these tables and publishes messages to Kafka topics. 
+
+These topics are consumed by `snack-order-processor` which is a Kafka-Streams application that joins data from these topics to create an Order-Aggregate (_CustomerOrder_) 
+object which is then published to a `customer-order-aggregate` topic. 
+
+This topic is consumed by MongoDB Sink Connector and the data is persisted in MongoDB which is served by `snack-customer-orders`service.
+
 ## References
 
 * Source Material
