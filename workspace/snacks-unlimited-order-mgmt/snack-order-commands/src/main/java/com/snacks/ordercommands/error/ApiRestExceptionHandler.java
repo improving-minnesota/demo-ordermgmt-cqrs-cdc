@@ -35,4 +35,22 @@ public class ApiRestExceptionHandler extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(OrderFullfillmentException.class)
+    ResponseEntity<Object> handleOrderFulfillmentException(OrderFullfillmentException e) {
+        ApiError apiError = new ApiError(e.getMessage());
+
+        e.printStackTrace();
+
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OrderShippingException.class)
+    ResponseEntity<Object> handleOrderShippingException(OrderShippingException e) {
+        ApiError apiError = new ApiError(e.getMessage());
+
+        e.printStackTrace();
+
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
 }

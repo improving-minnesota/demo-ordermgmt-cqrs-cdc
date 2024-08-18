@@ -3,9 +3,15 @@ package com.snacks.ordercommands.domain.service;
 import com.snacks.ordercommands.api.model.ItemStatusUpdateRecord;
 import com.snacks.ordercommands.api.model.OrderInfoRecord;
 import com.snacks.ordercommands.domain.model.entity.ItemDetail;
+import com.snacks.ordercommands.domain.model.entity.Payment;
+import com.snacks.ordercommands.domain.model.entity.ShippingLocation;
 import com.snacks.ordercommands.domain.model.value.ItemStatus;
 import com.snacks.ordercommands.domain.repository.ItemDetailRepository;
+import com.snacks.ordercommands.domain.repository.PaymentRepository;
+import com.snacks.ordercommands.domain.repository.ShippingLocationRepository;
 import com.snacks.ordercommands.error.OrderAlreadyExistsException;
+import com.snacks.ordercommands.error.OrderFullfillmentException;
+import com.snacks.ordercommands.error.OrderShippingException;
 import com.snacks.ordercommands.utils.ItemDetailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +27,14 @@ public class ItemDetailService {
     private static final Logger log = LoggerFactory.getLogger(ItemDetailService.class);
 
     private ItemDetailRepository itemDetailRepository;
+    private ShippingLocationRepository shippingLocationRepository;
+    private PaymentRepository paymentRepository;
 
     @Autowired
-    public ItemDetailService(ItemDetailRepository itemDetailsRepository) {
-        this.itemDetailRepository = itemDetailsRepository;
+    public ItemDetailService(ItemDetailRepository itemDetailRepository, ShippingLocationRepository shippingLocationRepository, PaymentRepository paymentRepository) {
+        this.itemDetailRepository = itemDetailRepository;
+        this.shippingLocationRepository = shippingLocationRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     public OrderInfoRecord saveNewOrder(OrderInfoRecord orderInfoRecord) {
@@ -44,6 +54,8 @@ public class ItemDetailService {
         List<ItemDetail> itemDetailList = itemDetailRepository.findByOrderId(itemStatusUpdateRecord.orderId());
 
         if (!ObjectUtils.isEmpty(itemDetailList)) {
+            validateStatusChange(itemStatusUpdateRecord);
+
             itemDetailList.forEach(itemDetail -> itemDetail.setItemStatus(ItemStatus.valueOf(itemStatusUpdateRecord.itemStatus())));
             itemDetailRepository.saveAll(itemDetailList);
         }
@@ -65,4 +77,23 @@ public class ItemDetailService {
         return orderInfoRecord;
     }
     // endregion
+
+    // region Validation
+    private void validateStatusChange(ItemStatusUpdateRecord itemStatusUpdateRecord) {
+        Payment payment = paymentRepository.findByOrderId(itemStatusUpdateRecord.orderId());
+        ShippingLocation shippingLocation = shippingLocationRepository.findByOrderId(itemStatusUpdateRecord.orderId());
+
+        if (itemStatusUpdateRecord.itemStatus().equals(ItemStatus.FULFILLED.toString())) {
+            if (ObjectUtils.isEmpty(payment)) {
+                throw new OrderFullfillmentException("Cannot fulfill order until payment has been processed for Order Id: " + itemStatusUpdateRecord.orderId());
+            }
+        }
+
+        if (itemStatusUpdateRecord.itemStatus().equals(ItemStatus.SHIPPED.toString())) {
+            if (ObjectUtils.isEmpty(shippingLocation) || ObjectUtils.isEmpty(payment)) {
+                throw new OrderShippingException("Cannot ship order until payment has been processed and shipping location provided for Order Id: " + itemStatusUpdateRecord.orderId());
+            }
+
+        }
+    }
 }
