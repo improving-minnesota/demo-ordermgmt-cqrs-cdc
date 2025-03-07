@@ -1,0 +1,50 @@
+networks:
+  flink:
+    name: flink
+    external: true
+  datastreaming:
+    name: datastreaming
+    external: true
+  datastores:
+    name: datastores
+    external: true
+  default:
+    # external: true
+    name: flink
+
+services:
+  sql-client-init:
+    build: flink-connectors/.
+    container_name: flink-sqlclient
+    networks:
+      - flink
+      - datastreaming
+      - datastores
+    command: bin/sql-client.sh embedded -i snack-orders-init.sql -f snack-orders-job.sql
+    volumes:
+      - ./flink-connectors/snack-orders-init.sql:/opt/flink/snack-orders-init.sql
+      - ./flink-connectors/snack-orders-job.sql:/opt/flink/snack-orders-job.sql
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        rest.address: jobmanager
+
+  sql-client-cli:
+    build: flink-connectors/.
+    container_name: flink-sqlclient
+    networks:
+      - flink
+      - datastreaming
+      - datastores
+    command: bin/sql-client.sh embedded -i snack-orders-init.sql
+    volumes:
+      - ./flink-connectors/snack-orders-init.sql:/opt/flink/snack-orders-init.sql
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        rest.address: jobmanager
+
+volumes:
+  flink_data:

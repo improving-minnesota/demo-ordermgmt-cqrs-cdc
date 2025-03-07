@@ -8,14 +8,14 @@ services:
 
 # REDPANDA COMPONENTS (PLATFORM)
   redpanda:
-    image: docker.redpanda.com/redpandadata/redpanda:v24.1.1
+    image: docker.redpanda.com/redpandadata/redpanda:v24.3.6
     container_name: broker
     networks:
       - datastreaming
     command:
       - redpanda start
       # Mode dev-container uses well-known configuration properties for development in containers.
-      - --mode dev-container
+      - --overprovisioned
       # Tells Seastar (the framework Redpanda uses under the hood) to use 1 core on the system.
       - --smp 1
       - --kafka-addr internal://0.0.0.0:29092,external://0.0.0.0:9092
@@ -34,6 +34,7 @@ services:
       # Redpanda brokers use the RPC API to communicate with each other internally.
       - --rpc-addr broker:33145
       - --advertise-rpc-addr broker:33145
+      - --set redpanda.auto_create_topics_enabled=true
     ports:
       - 8081:8081
       - 8082:8082
@@ -48,9 +49,22 @@ services:
       retries: 5
       start_period: 5s
 
-# Kafka Connect
+# Create initial topics to support the Snack Order Processor
+# When using Flink SQL, these topics need to be created before creating the job.
+  create-topics:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.3.6
+    container_name: create-topics
+    depends_on:
+      - redpanda
+    networks:
+      - datastreaming
+    volumes:
+      - ./redpanda-init/create-topics.sh:/usr/bin/create-topics.sh
+    entrypoint: ["/bin/sh", "-c", "chmod +x /usr/bin/create-topics.sh && /usr/bin/create-topics.sh"]
+
+  # Kafka Connect
   connect:
-    image: cnfldemos/cp-server-connect-datagen:0.6.2-7.5.0
+    image: cnfldemos/cp-server-connect-datagen:0.6.4-7.6.0
     hostname: connect
     container_name: connect
     networks:

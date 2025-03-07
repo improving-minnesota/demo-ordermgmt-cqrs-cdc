@@ -3,8 +3,10 @@ networks:
     name: apps
   datastreaming:
     name: datastreaming
+    external: true
   datastores:
     name: datastores
+    external: true
 
 services:
   snack-order-commands:

@@ -1,0 +1,51 @@
+networks:
+  flink:
+    name: flink
+  datastreaming:
+    name: datastreaming
+  datastores:
+    name: datastores
+  default:
+    # external: true
+    name: flink
+
+services:
+  jobmanager:
+    build: flink-connectors/.
+
+    container_name: flink-jobmanager
+    networks:
+      - flink
+      - datastreaming
+      - datastores
+    ports:
+      - "8881:8081"
+    command: jobmanager
+    volumes:
+      - flink_data:/tmp/
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager        
+
+  taskmanager:
+    build: flink-connectors/.
+    container_name: flink-taskmanager
+    networks:
+      - flink
+      - datastreaming
+      - datastores
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    scale: 1
+    volumes:
+      - flink_data:/tmp/
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+
+volumes:
+  flink_data:

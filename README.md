@@ -109,6 +109,7 @@ using CQRS with CDC and Kadka.
 The "platform" consists of:
 
 * Confluent Platform (Docker) - Kafka, Kafka Connect
+* Apache Flink - SQL Client
 * MySQL and "Adminer" (manage MySQL via browser)
 * MongoDB and Mongo Express (manage Mongo via browser)
 
@@ -120,6 +121,16 @@ $ ./platform kafka|redpanda start
 
 ```
 $ ./platform kafka|redpanda stop
+```
+
+**FlinkSQL: Initializes Snack Order Processing tables(kafka connector) and insert (streaming job)**
+```
+$ ./platform flinksql --init
+```
+
+**FlinkSQL: Opens interactive Flink SQL shell**
+```
+$ ./platform flinksql
 ```
 
 ### Spinning up Playground "Apps"
@@ -140,7 +151,11 @@ $ ./gradlew clean docker
 **Start & Stop the Apps**
 
 ```
-$ ./apps start
+$ ./apps start --kstreams
+```
+
+```
+$ ./apps start --flink-sql
 ```
 
 ```
@@ -161,6 +176,24 @@ $ ./apps stop
 
 See [Snacks Unlimited - Postman Collection](./workspace/postman/UC-Snacks%20Unlimited.postman_collection.json).
 
+### Run Demo
+
+```
+-- Demo with Kafka Streams
+
+$ cd .workspace
+$ ./platform redpanda|kafka start
+$ ./apps start --kstreams
+```
+```
+-- Demo with Flink SQL
+
+$ cd .workspace
+$ ./platform redpanda|kafka start
+$ ./apps start --flinksql
+$ ./platform flinksql --init
+```
+
 --- DEMO START ---
 
 * 1 - Create Kafka Connectors
@@ -175,15 +208,52 @@ See [Snacks Unlimited - Postman Collection](./workspace/postman/UC-Snacks%20Unli
   * PUT Order Fulfillment
 
 * 4 - Ship Orders (Minions Delivery Team)
-    * GET FULFILLED Orders
-    * PUT Order Shipment 
+  * GET FULFILLED Orders
+  * PUT Order Shipment 
   
 --- DEMO COMPLETE ---
 
-* List Kafka Topics
+### Tools During Demo
+
+* Flink SQL Shell
+```
+-- Open Flink SQL Shell
+
+$ cd .workspace
+$ ./platform flinksql
+
+Flink SQL>
+```
+* [Flink Dashboard](http://localhost:8881/#/overview)
+
+* Kafka CLI
+  * List Kafka Topics
+  
+  ```
+  $ kafka-topics \
+      --bootstrap-server $BOOTSTRAP_SERVER \
+      --command-config $CC_CONFIG \
+      --list
+  ```
+  
 * Consume Kafka Topic Records
-* MySQL Database
-* MongoDB Database
+  
+  ```
+  $ kafka-console-consumer \
+    --topic "$1" \
+    --bootstrap-server $BOOTSTRAP_SERVER \
+    --property "schema.registry.url=$SCHEMA_REGISTRY_URL" \
+    --property "basic.auth.credentials.source=USER_INFO" \
+    --property "basic.auth.user.info=$SCHEMA_AUTH" \
+    --property "print.key=true" \
+    --property "key.separator= ==> " \
+    --consumer.config $CC_CONFIG \
+    --consumer-property "group.id=$CONSUMER_GRP" \
+    --from-beginning -- OPTIONAL
+  ```
+  
+* [MySQL Database](http://localhost:8180/)
+* [MongoDB Database](http://localhost:8181/)
 
 ---
 
@@ -427,9 +497,13 @@ Need to grant privileges for the Debezium MySQLConnector
 
 ## My Discoveries (What I Learned)
 
-| Item                                                                                                          | Discovery Notes |
-|---------------------------------------------------------------------------------------------------------------|-----------------|
-| Using @DataJpaTest for JPA Repository Tests                                                                   | This annotation bootstraps the test with an in-memory H2 SQL database.|
- | Leverage Spring profiles for _./gradlew bootRun_, _./apps start_ (local-docker), _local-embedded_ for testing | See _src/main/resources/application.yml|
- | Access privileges for CDC Connector                                                                           | Check out _./docker/mysql/init/init-db.sql_ to grant privileges to the order-command-user.
+I learned alot so this is not an exhuastive list.
+
+| Item                                                                                                          | Discovery Notes                                                                                                                                                                                                                   |
+|---------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Using @DataJpaTest for JPA Repository Tests                                                                   | This annotation bootstraps the test with an in-memory H2 SQL database.                                                                                                                                                            |
+| Leverage Spring profiles for _./gradlew bootRun_, _./apps start_ (local-docker), _local-embedded_ for testing | See _src/main/resources/application.yml                                                                                                                                                                                           |
+| Access privileges for CDC Connector                                                                           | Check out _./docker/mysql/init/init-db.sql_ to grant privileges to the order-command-user.                                                                                                                                        |
+| Flink SQL Client                                                                                              | - tables (connectors) are created in memory and are "gone" after the sessions is closed<br />- The Kafka topics the tables connect to must be created before a Flink Job (using INSERT command) will start corectly.              |
+| Redpanda vs Kafka (Dockerized)                                                                                | - Redpanda containers start up quicker and offers seamless "kafka protocol" support for the applications and Flink SQL.<br />- It was fun switching between Confluent Kafka and Redpanda as I experimented with the running demo. |
 
