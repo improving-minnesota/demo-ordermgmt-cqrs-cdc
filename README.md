@@ -123,9 +123,9 @@ $ ./platform kafka|redpanda start
 $ ./platform kafka|redpanda stop
 ```
 
-**FlinkSQL: Initializes Snack Order Processing tables(kafka connector) and insert (streaming job)**
+**FlinkSQL: Initializes Snack Order Processing tables(kafka connector) and starts the streaming job with INSERT command**
 ```
-$ ./platform flinksql --init
+$ ./platform flinksql --job
 ```
 
 **FlinkSQL: Opens interactive Flink SQL shell**

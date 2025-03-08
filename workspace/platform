@@ -6,7 +6,7 @@ echoCommands() {
 	echo "Usage:  These are valid commands"
   echo "platform kafka|redpanda start"
   echo "platform kafka|redpanda stop"
-  echo "platform flinksql [--init]"
+  echo "platform flinksql [--job]"
   echo ""
 }
 
@@ -26,12 +26,12 @@ stopRedpanda() {
   docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-redpanda.yml --file ./docker/docker-compose-flink.yml --project-name platform down -v
 }
 
-initFlinkSQL() {
-  docker compose --file ./docker/docker-compose-flinksql.yml --project-name flinksql-demo run sql-client-init
+runJobFlinkSQL() {
+  docker compose --file ./docker/docker-compose-flinksql.yml --project-name flinksql-snacks run sql-client-job
 }
 
 runFlinkSQL() {
-  docker compose --file ./docker/docker-compose-flinksql.yml --project-name flinksql-demo run sql-client-cli
+  docker compose --file ./docker/docker-compose-flinksql.yml --project-name flinksql-snacks run sql-client-cli
 }
 
 #~ END functions ---------------------------------------------------------------------------
@@ -49,8 +49,8 @@ elif [[ $1 == "kafka" ]] && [[ $2 == "stop" ]]; then
 		stopKafka
 elif [[ $1 == "redpanda" ]] && [[ $2 == "stop" ]]; then
 		stopRedpanda
-elif [[ $1 == "flinksql" ]] && [[ $2 == "--init" ]]; then
-		initFlinkSQL
+elif [[ $1 == "flinksql" ]] && [[ $2 == "--job" ]]; then
+		runJobFlinkSQL
 elif [[ $1 == "flinksql" ]]; then
 		runFlinkSQL
 else

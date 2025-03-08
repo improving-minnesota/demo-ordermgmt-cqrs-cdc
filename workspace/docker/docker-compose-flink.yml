@@ -10,7 +10,7 @@ networks:
     name: flink
 
 services:
-  jobmanager:
+  flink-jobmanager:
     build: flink-connectors/.
 
     container_name: flink-jobmanager
@@ -26,9 +26,9 @@ services:
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager        
+        jobmanager.rpc.address: flink-jobmanager        
 
-  taskmanager:
+  flink-taskmanager:
     build: flink-connectors/.
     container_name: flink-taskmanager
     networks:
@@ -36,7 +36,7 @@ services:
       - datastreaming
       - datastores
     depends_on:
-      - jobmanager
+      - flink-jobmanager
     command: taskmanager
     scale: 1
     volumes:
@@ -44,7 +44,7 @@ services:
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
+        jobmanager.rpc.address: flink-jobmanager
         taskmanager.numberOfTaskSlots: 2
 
 volumes:

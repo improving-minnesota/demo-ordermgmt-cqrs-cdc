@@ -13,7 +13,7 @@ networks:
     name: flink
 
 services:
-  sql-client-init:
+  sql-client-job:
     build: flink-connectors/.
     container_name: flink-sqlclient
     networks:
@@ -27,8 +27,8 @@ services:
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
-        rest.address: jobmanager
+        jobmanager.rpc.address: flink-jobmanager
+        rest.address: flink-jobmanager
 
   sql-client-cli:
     build: flink-connectors/.
@@ -43,8 +43,8 @@ services:
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
-        rest.address: jobmanager
+        jobmanager.rpc.address: flink-jobmanager
+        rest.address: flink-jobmanager
 
 volumes:
   flink_data:

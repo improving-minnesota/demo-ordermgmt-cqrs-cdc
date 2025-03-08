@@ -1,3 +1,8 @@
+-- -----------
+--Configure Kafka Connectors for the Snack Order Processor
+-- -----------
+CREATE CATALOG snack_orders_kafka_catalog WITH ('type'='generic_in_memory');
+USE CATALOG snack_orders_kafka_catalog;
 
 -- Item Details
 CREATE TABLE item_details (
@@ -6,7 +11,7 @@ CREATE TABLE item_details (
         order_id STRING,
         item_name STRING,
         item_status INT,
-        price DECIMAL(10,2) NOT NULL,
+        price DECIMAL(10,2),
         currency INT,
         quantity INT
     >
@@ -116,4 +121,32 @@ CREATE TABLE customer_order_aggregate (
     'key.format' = 'raw',
     'value.format' = 'json'
 );
+
+-- -----------
+-- Configure MySQL Connectors for the Snack Order Commands
+-- -----------
+CREATE CATALOG snack_commands_mysql_catalog WITH (
+  'type' = 'jdbc',
+  'default-database' = 'order-command-db',
+  'username' = 'order-command-user',
+  'password' = 'password',
+  'base-url' = 'jdbc:mysql://mysql_db_server:3306'
+);
+
+-- -----------
+-- MongoDB Connector for Snack Customer Orders
+-- -----------
+CREATE CATALOG snack_orders_mongo_catalog WITH ('type'='generic_in_memory');
+USE CATALOG snack_orders_mongo_catalog;
+CREATE TABLE customerOrder (
+    orderId STRING
+) WITH (
+    'connector' = 'mongodb',
+    'uri' = 'mongodb://mongo-user:password@mongodb_server:27017/customer_order_db',
+    'database' = 'customer_order_db',
+    'collection' = 'customerOrder'
+);
+
+-- Switch back to preferred catalog
+USE CATALOG snack_orders_kafka_catalog;
 
