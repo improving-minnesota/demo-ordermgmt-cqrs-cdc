@@ -11,7 +11,7 @@ echoCommands() {
   echo ""
 }
 
-startApps() {
+startAppsWithKStreams() {
   docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d
 }
 
@@ -32,7 +32,7 @@ if [ $# -eq 0 ]; then
     echoCommands
     exit -1
 elif [ $1 == "start" ] && [ $2 == "--kstreams" ]; then
-		startApps
+		startAppsWithKStreams
 elif [ $1 == "start" ] && [ $2 == "--flinksql" ]; then
 		startAppsNoKS
 elif [ $1 == "stop" ]; then
