@@ -6,23 +6,32 @@ echoCommands() {
 	echo "Usage:  These are valid commands"
   echo "platform kafka|redpanda start"
   echo "platform kafka|redpanda stop"
+  echo "platform flinksql [--job]"
   echo ""
 }
 
 startKafka() {
-  docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-kafka.yml --project-name platform up -d
+  docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-kafka.yml --file ./docker/docker-compose-flink.yml --project-name platform up -d
 }
 
 stopKafka() {
-  docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-kafka.yml --project-name platform down -v
+  docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-kafka.yml --file ./docker/docker-compose-flink.yml --project-name platform down -v
 }
 
 startRedpanda() {
-  docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-redpanda.yml --project-name platform up -d
+  docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-redpanda.yml --file ./docker/docker-compose-flink.yml --project-name platform up -d
 }
 
 stopRedpanda() {
-  docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-redpanda.yml --project-name platform down -v
+  docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-redpanda.yml --file ./docker/docker-compose-flink.yml --project-name platform down -v
+}
+
+runJobFlinkSQL() {
+  docker compose --file ./docker/docker-compose-flinksql.yml --project-name flinksql-snacks run sql-client-job
+}
+
+runFlinkSQL() {
+  docker compose --file ./docker/docker-compose-flinksql.yml --project-name flinksql-snacks run sql-client-cli
 }
 
 #~ END functions ---------------------------------------------------------------------------
@@ -32,14 +41,18 @@ stopRedpanda() {
 if [ $# -eq 0 ]; then
     echoCommands
     exit 0
-elif [ $1 == "kafka" ] && [ $2 == "start" ]; then
+elif [[ $1 == "kafka" ]] && [[ $2 == "start" ]]; then
 		startKafka
-elif [ $1 == "redpanda" ] && [ $2 == "start" ]; then
+elif [[ $1 == "redpanda" ]] && [[ $2 == "start" ]]; then
 		startRedpanda
-elif [ $1 == "kafka" ] && [ $2 == "stop" ]; then
+elif [[ $1 == "kafka" ]] && [[ $2 == "stop" ]]; then
 		stopKafka
-elif [ $1 == "redpanda" ] && [ $2 == "stop" ]; then
+elif [[ $1 == "redpanda" ]] && [[ $2 == "stop" ]]; then
 		stopRedpanda
+elif [[ $1 == "flinksql" ]] && [[ $2 == "--job" ]]; then
+		runJobFlinkSQL
+elif [[ $1 == "flinksql" ]]; then
+		runFlinkSQL
 else
 	echo "\nERROR:  See command usage\n"
 	echoCommands

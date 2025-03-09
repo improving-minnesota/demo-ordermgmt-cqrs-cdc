@@ -7,9 +7,9 @@ networks:
 services:
 
 # CONFLUENT PLATFORM COMPONENTS (PLATFORM)
-# 7.6.0 KRaft installation
+# 7.9.0 KRaft installation
   kafka:
-    image: confluentinc/cp-kafka:7.6.0
+    image: confluentinc/cp-kafka:7.9.0
     hostname: broker
     container_name: broker
     networks:
@@ -21,6 +21,7 @@ services:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
       KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -36,9 +37,25 @@ services:
       # Replace CLUSTER_ID with a unique base64 UUID using "bin/kafka-storage.sh random-uuid"
       # See https://docs.confluent.io/kafka/operations-tools/kafka-tools.html#kafka-storage-sh
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+    volumes:
+      - ./kafka-init/create-topics.sh:/docker-entrypoint-initdb.d/create-topics.sh
+
+# Create initial topics to support the Snack Order Processor
+# When using Flink SQL, these topics need to be created before creating the job.
+  create-topics:
+    image: confluentinc/cp-kafka:7.9.0
+    container_name: create-topics
+    depends_on:
+      - kafka
+    networks:
+      - datastreaming
+    entrypoint: ["/bin/sh", "-c", "chmod +x /usr/bin/create-topics.sh && /usr/bin/create-topics.sh"]
+    restart: "no"  # This ensures the container exits once topics are created
+    volumes:
+      - ./kafka-init/create-topics.sh:/usr/bin/create-topics.sh
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.6.0
+    image: confluentinc/cp-schema-registry:7.9.0
     hostname: schema-registry
     container_name: schema-registry
     networks:
@@ -53,7 +70,7 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
   connect:
-    image: cnfldemos/cp-server-connect-datagen:0.6.2-7.5.0
+    image: cnfldemos/cp-server-connect-datagen:0.6.4-7.6.0
     hostname: connect
     container_name: connect
     networks:

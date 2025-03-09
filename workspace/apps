@@ -4,13 +4,20 @@
 echoCommands() {
   echo ""
 	echo "Usage:  These are valid commands"
-  echo "apps start"
+  echo "pps start"
+  echo "apps start --kstreams"
+  echo "apps start --flinksql"
   echo "apps stop"
   echo ""
 }
 
-startApps() {
+startAppsWithKStreams() {
   docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d
+}
+
+startAppsNoKS () {
+  docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d snack-order-commands
+  docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d snack-customer-orders
 }
 
 stopApps() {
@@ -24,8 +31,10 @@ stopApps() {
 if [ $# -eq 0 ]; then
     echoCommands
     exit -1
-elif [ $1 == "start" ]; then
-		startApps
+elif [ $1 == "start" ] && [ $2 == "--kstreams" ]; then
+		startAppsWithKStreams
+elif [ $1 == "start" ] && [ $2 == "--flinksql" ]; then
+		startAppsNoKS
 elif [ $1 == "stop" ]; then
 		stopApps
 else
