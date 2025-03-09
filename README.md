@@ -108,6 +108,12 @@ using CQRS with CDC and Kadka.
 
 ## Playground Environment
 
+### Kafka-backed Playground
+![](docs/images/playground-kafka.png)
+
+### Redpanda-backed Playground
+![](docs/images/playground-redpanda.png)
+
 ### Spinning up Playground "Platform"
 
 The "platform" consists of:
