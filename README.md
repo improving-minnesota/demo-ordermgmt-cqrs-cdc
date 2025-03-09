@@ -96,9 +96,13 @@ using CQRS with CDC and Kadka.
 
 ![](docs/images/solution-c4-component.png)
 
-### Implementation Kafka Streams Topology
+### Implementation: Kafka Streams Topology
 
 ![](docs/images/kafka-streams-topology.png)
+
+### Implementation: Flink SQL Job Overview
+
+![](docs/images/flinksql-job-overview.png)
 
 ---
 
@@ -499,11 +503,13 @@ Need to grant privileges for the Debezium MySQLConnector
 
 I learned alot so this is not an exhuastive list.
 
-| Item                                                                                                          | Discovery Notes                                                                                                                                                                                                                   |
-|---------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Using @DataJpaTest for JPA Repository Tests                                                                   | This annotation bootstraps the test with an in-memory H2 SQL database.                                                                                                                                                            |
-| Leverage Spring profiles for _./gradlew bootRun_, _./apps start_ (local-docker), _local-embedded_ for testing | See _src/main/resources/application.yml                                                                                                                                                                                           |
-| Access privileges for CDC Connector                                                                           | Check out _./docker/mysql/init/init-db.sql_ to grant privileges to the order-command-user.                                                                                                                                        |
-| Flink SQL Client                                                                                              | - tables (connectors) are created in memory and are "gone" after the sessions is closed<br />- The Kafka topics the tables connect to must be created before a Flink Job (using INSERT command) will start corectly.              |
-| Redpanda vs Kafka (Dockerized)                                                                                | - Redpanda containers start up quicker and offers seamless "kafka protocol" support for the applications and Flink SQL.<br />- It was fun switching between Confluent Kafka and Redpanda as I experimented with the running demo. |
+| Item                                                                                                          | Discovery Notes                                                                                                                                                                                                                                                                                                            |
+|---------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Using @DataJpaTest for JPA Repository Tests                                                                   | This annotation bootstraps the test with an in-memory H2 SQL database.                                                                                                                                                                                                                                                     |
+| Leverage Spring profiles for _./gradlew bootRun_, _./apps start_ (local-docker), _local-embedded_ for testing | See _src/main/resources/application.yml                                                                                                                                                                                                                                                                                    |
+| Access privileges for CDC Connector                                                                           | Check out _./docker/mysql/init/init-db.sql_ to grant privileges to the order-command-user.                                                                                                                                                                                                                                 |
+| Flink SQL Client                                                                                              | - tables (connectors) are created in memory and are "gone" after the sessions is closed<br />- The Kafka topics the tables connect to must be created before a Flink Job (using INSERT command) will start corectly.                                                                                                       |
+| Flink SQL - 1.19.x vs 1.20.x                                                                                  | This repo uses Flink SQL 1.20.1. Here are some key differences from the last stable version:<br />- 1.20.x supports "ARRAY_AGG" key word making grouping a list of objects easy<br />- 1.20.1 JDBC and MongoDB connectors are not yet available. Keeping an eye on this to connect MySQL and MongoDB from Flink SQL client |
+| Redpanda vs Kafka (Dockerized)                                                                                | - Redpanda containers start up quicker and offers seamless "kafka protocol" support for the applications and Flink SQL.<br />- It was fun switching between Confluent Kafka and Redpanda as I experimented with the running demo.                                                                                          |
+
 
