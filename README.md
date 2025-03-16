@@ -170,9 +170,9 @@ This will start the following Spring Boot applications:
 * snack-order-commands (Write / MySQL)
 * snack-customer-orders (Read / MongoDB)
 * FlinkSQL: streaming job with INSERT command
-* 
+
 ```
-$ ./apps start --flink-sql
+$ ./apps start --flinksql
 ```
 
 **Stop the Apps**
@@ -184,7 +184,7 @@ $ ./apps stop
 **Run FlinkSQL Command-Line**
 
 ```
-$ ./apps flinksql-cli
+$ ./apps cli flinksql
 ```
 
 ### Creating the Debezium CDC MySQL Source Connector (order-command-db)
