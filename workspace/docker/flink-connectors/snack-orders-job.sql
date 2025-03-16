@@ -18,7 +18,7 @@ SELECT
                 ELSE 'PAID'
             END,
             ROW(o.price, IF(o.currency = 0, 'USD', 'USD')),
-            o.quantity)) as items,
+            o.quantity) ORDER BY o.item_id) as items,
     ROW(
         s.customer_name,
         s.customer_address,

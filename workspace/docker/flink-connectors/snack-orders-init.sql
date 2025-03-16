@@ -139,10 +139,11 @@ CREATE CATALOG snack_commands_mysql_catalog WITH (
 CREATE CATALOG snack_orders_mongo_catalog WITH ('type'='generic_in_memory');
 USE CATALOG snack_orders_mongo_catalog;
 CREATE TABLE customerOrder (
-    orderId STRING
+    _id STRING,
+    customerOrder STRING
 ) WITH (
     'connector' = 'mongodb',
-    'uri' = 'mongodb://mongo-user:password@mongodb_server:27017/customer_order_db',
+    'uri' = 'mongodb://mongo-user:password@mongodb_server:27017',
     'database' = 'customer_order_db',
     'collection' = 'customerOrder'
 );

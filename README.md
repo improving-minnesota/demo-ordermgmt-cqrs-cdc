@@ -17,6 +17,16 @@
 
 # Playground - DDD Aggregates w/ CDC and CQRS
 
+## Elevator Pitch
+
+This repository "playground" delivers a solution design with demo-able code that is colored with a fun, fictional story 
+providing a "magical journey from context to code using my grandkids love of snacks as inspiration to bring it all together".
+
+Getting acquainted with this material will leave you a certified _Solution Snackitect_ with an understanding
+of applying CDC, CQRS, DDD, Kafka Streams, and Flink SQL into an end-to-end solution. 
+
+## What is in It?
+
 This repository is packed with concepts, drawings, slides, and code related to a 
 working "playground" building DDD Aggregates via a CDC-CQRS data stream.
 
@@ -133,17 +143,15 @@ $ ./platform kafka|redpanda start
 $ ./platform kafka|redpanda stop
 ```
 
-**FlinkSQL: Initializes Snack Order Processing tables(kafka connector) and starts the streaming job with INSERT command**
-```
-$ ./platform flinksql --job
-```
-
-**FlinkSQL: Opens interactive Flink SQL shell**
-```
-$ ./platform flinksql
-```
-
 ### Spinning up Playground "Apps"
+
+**Build the Apps**
+
+```
+$ ./apps build
+```
+
+**Start the Apps with Kafka Streams Processing**
 
 This will start the following Spring Boot applications:
 
@@ -151,25 +159,32 @@ This will start the following Spring Boot applications:
 * snack-customer-orders (Read / MongoDB)
 * snack-order-processor (Anti-corruption / Kafka Streams)
 
-NOTE: Ensure the docker images for the apps have been build by running the following
-in each _service project_.
-
-```
-$ ./gradlew clean docker
-```
-
-**Start & Stop the Apps**
-
 ```
 $ ./apps start --kstreams
 ```
 
+**Start the Apps with FlinkSQL Processing**
+
+This will start the following Spring Boot applications:
+
+* snack-order-commands (Write / MySQL)
+* snack-customer-orders (Read / MongoDB)
+* FlinkSQL: streaming job with INSERT command
+* 
 ```
 $ ./apps start --flink-sql
 ```
 
+**Stop the Apps**
+
 ```
 $ ./apps stop
+```
+
+**Run FlinkSQL Command-Line**
+
+```
+$ ./apps flinksql-cli
 ```
 
 ### Creating the Debezium CDC MySQL Source Connector (order-command-db)
@@ -201,7 +216,6 @@ $ ./apps start --kstreams
 $ cd .workspace
 $ ./platform redpanda|kafka start
 $ ./apps start --flinksql
-$ ./platform flinksql --init
 ```
 
 --- DEMO START ---
@@ -230,7 +244,7 @@ $ ./platform flinksql --init
 -- Open Flink SQL Shell
 
 $ cd .workspace
-$ ./platform flinksql
+$ ./apps flinksql-cli
 
 Flink SQL>
 ```

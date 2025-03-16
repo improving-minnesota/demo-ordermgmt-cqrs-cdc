@@ -4,24 +4,47 @@
 echoCommands() {
   echo ""
 	echo "Usage:  These are valid commands"
-  echo "pps start"
+	echo "apps build"
+  echo "apps start"
   echo "apps start --kstreams"
   echo "apps start --flinksql"
+  echo "apps flinksql"
   echo "apps stop"
   echo ""
+}
+
+buildApps() {
+  echo "..."
+  echo "Build Snack Order Commands"
+  (cd ./snacks-unlimited-order-mgmt/snack-order-commands && ./gradlew clean docker)
+  echo "Build Snack Order Processor"
+  (cd ./snacks-unlimited-order-mgmt/snack-order-processor && ./gradlew clean docker)
+  echo "Build Snack Customer Orders"
+  (cd ./snacks-unlimited-order-mgmt/snack-customer-orders && ./gradlew clean docker)
+
+  echo "DONE!!"
 }
 
 startAppsWithKStreams() {
   docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d
 }
 
-startAppsNoKS () {
+startAppsFlinkSQL () {
   docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d snack-order-commands
   docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d snack-customer-orders
+
+  runJobFlinkSQL
 }
 
 stopApps() {
   docker compose --file ./docker/docker-compose-apps.yml --project-name apps down -v
+}
+
+runJobFlinkSQL() {
+  docker compose --file ./docker/docker-compose-flinksql.yml --project-name flinksql-snacks run sql-client-job
+}
+runFlinkSQL() {
+  docker compose --file ./docker/docker-compose-flinksql.yml --project-name flinksql-snacks run sql-client-cli
 }
 
 #~ END functions ---------------------------------------------------------------------------
@@ -31,10 +54,14 @@ stopApps() {
 if [ $# -eq 0 ]; then
     echoCommands
     exit -1
+elif [ $1 == "build" ]; then
+		buildApps
 elif [ $1 == "start" ] && [ $2 == "--kstreams" ]; then
 		startAppsWithKStreams
 elif [ $1 == "start" ] && [ $2 == "--flinksql" ]; then
-		startAppsNoKS
+		startAppsFlinkSQL
+elif [ $1 == "flinksql" ]; then
+		runFlinkSQL
 elif [ $1 == "stop" ]; then
 		stopApps
 else
