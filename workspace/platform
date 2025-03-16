@@ -6,7 +6,6 @@ echoCommands() {
 	echo "Usage:  These are valid commands"
   echo "platform kafka|redpanda start"
   echo "platform kafka|redpanda stop"
-  echo "platform flinksql [--job]"
   echo ""
 }
 
@@ -24,14 +23,6 @@ startRedpanda() {
 
 stopRedpanda() {
   docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-redpanda.yml --file ./docker/docker-compose-flink.yml --project-name platform down -v
-}
-
-runJobFlinkSQL() {
-  docker compose --file ./docker/docker-compose-flinksql.yml --project-name flinksql-snacks run sql-client-job
-}
-
-runFlinkSQL() {
-  docker compose --file ./docker/docker-compose-flinksql.yml --project-name flinksql-snacks run sql-client-cli
 }
 
 #~ END functions ---------------------------------------------------------------------------
