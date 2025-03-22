@@ -102,7 +102,7 @@ using CQRS with CDC and Kadka.
 
 ![](docs/images/solution-c4-context.png)
 
-### C4 Modeling - Component View
+### C4 Modeling - Container View
 
 ![](docs/images/solution-c4-component.png)
 
@@ -132,6 +132,8 @@ The "platform" consists of:
 * Apache Flink - SQL Client
 * MySQL and "Adminer" (manage MySQL via browser)
 * MongoDB and Mongo Express (manage Mongo via browser)
+
+The steps below can be executed from _/workspace_ directory.
 
 **Start and Stop the Platform**
 
