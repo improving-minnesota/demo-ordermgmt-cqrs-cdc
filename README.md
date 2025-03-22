@@ -133,7 +133,12 @@ The "platform" consists of:
 * MySQL and "Adminer" (manage MySQL via browser)
 * MongoDB and Mongo Express (manage Mongo via browser)
 
-The steps below can be executed from _/workspace_ directory.
+The steps below can be executed from _./workspace_ directory.
+
+```
+from <ROOT> directory of this repository
+$ cd ./workspace
+```
 
 **Start and Stop the Platform**
 

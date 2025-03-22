@@ -62,7 +62,7 @@ public class CustomerOrderAggregateStream {
     private static final String PAYMENT_RECORD_STATE_STORE = "payment-state-store";
     // endregion
 
-    // region Object Mappper
+    // region Object Mapper
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     // endregion

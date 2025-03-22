@@ -22,8 +22,8 @@ services:
       - datastores
     command: bin/sql-client.sh embedded -i snack-orders-init.sql -f snack-orders-job.sql
     volumes:
-      - ./flink-connectors/snack-orders-init.sql:/opt/flink/snack-orders-init.sql
-      - ./flink-connectors/snack-orders-job.sql:/opt/flink/snack-orders-job.sql
+      - ./../snacks-unlimited-order-mgmt/snack-order-flinksql/snack-orders-init.sql:/opt/flink/snack-orders-init.sql
+      - ./../snacks-unlimited-order-mgmt/snack-order-flinksql/snack-orders-job.sql:/opt/flink/snack-orders-job.sql
     environment:
       - |
         FLINK_PROPERTIES=
@@ -39,7 +39,7 @@ services:
       - datastores
     command: bin/sql-client.sh embedded -i snack-orders-init.sql
     volumes:
-      - ./flink-connectors/snack-orders-init.sql:/opt/flink/snack-orders-init.sql
+      - ./../snacks-unlimited-order-mgmt/snack-order-flinksql/snack-orders-init.sql:/opt/flink/snack-orders-init.sql
     environment:
       - |
         FLINK_PROPERTIES=
