@@ -1,4 +1,5 @@
-FROM amazoncorretto:17-alpine
+# openjdk:17-jdk is used to safely run Kafka Streams Java applications
+FROM openjdk:17-jdk
 LABEL maintainer="Torey Lomenda"
 
 ARG JAR_FILE=build/libs/snack-order-processor-*-SNAPSHOT.jar

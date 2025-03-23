@@ -98,6 +98,10 @@ using CQRS with CDC and Kadka.
 
 ![](docs/images/solution-contextmap.png)
 
+### System Design: Righting Software - "The Method" 
+
+![](docs/images/system-design.png)
+
 ### C4 Modeling - Context View
 
 ![](docs/images/solution-c4-context.png)
