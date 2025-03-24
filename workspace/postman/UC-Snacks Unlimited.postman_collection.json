@@ -13,27 +13,6 @@
 					"name": "Source: MySQL",
 					"item": [
 						{
-							"name": "MySQL CDC Connector Status",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8083/connectors/order-command-db-connector/status",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8083",
-									"path": [
-										"connectors",
-										"order-command-db-connector",
-										"status"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Create MySQL CDC Connector",
 							"request": {
 								"method": "POST",
@@ -57,6 +36,27 @@
 									"path": [
 										"connectors",
 										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "MySQL CDC Connector Status",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/connectors/order-command-db-connector/status",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"connectors",
+										"order-command-db-connector",
+										"status"
 									]
 								}
 							},
@@ -97,27 +97,6 @@
 					"name": "Sink: MongoDB",
 					"item": [
 						{
-							"name": "MongoDB Connector Status",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8083/connectors/order-app-mongo-sink-connector/status",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8083",
-									"path": [
-										"connectors",
-										"order-app-mongo-sink-connector",
-										"status"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Create MongoDB Sink Connector",
 							"request": {
 								"method": "POST",
@@ -141,6 +120,27 @@
 									"path": [
 										"connectors",
 										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "MongoDB Connector Status",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/connectors/order-app-mongo-sink-connector/status",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"connectors",
+										"order-app-mongo-sink-connector",
+										"status"
 									]
 								}
 							},
@@ -283,64 +283,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "Order Fullfillment",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"orderId\": \"{{orderId-brady}}\",\n    \"itemStatus\": \"FULFILLED\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8800/api/item-details",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8800",
-									"path": [
-										"api",
-										"item-details"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order Shipment",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"orderId\": \"{{orderId-brady}}\",\n    \"itemStatus\": \"SHIPPED\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8800/api/item-details",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8800",
-									"path": [
-										"api",
-										"item-details"
-									]
-								}
-							},
-							"response": []
 						}
 					]
 				},
@@ -441,64 +383,6 @@
 									"path": [
 										"api",
 										"payment"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order Fullfillment",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"orderId\": \"{{orderId-oakley}}\",\n    \"itemStatus\": \"FULFILLED\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8800/api/item-details",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8800",
-									"path": [
-										"api",
-										"item-details"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order Shipment",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"orderId\": \"{{orderId-oakley}}\",\n    \"itemStatus\": \"SHIPPED\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:8800/api/item-details",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8800",
-									"path": [
-										"api",
-										"item-details"
 									]
 								}
 							},
@@ -607,44 +491,101 @@
 								}
 							},
 							"response": []
-						},
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Snack Customer Orders",
+			"item": [
+				{
+					"name": "Fulfill Orders",
+					"item": [
 						{
-							"name": "Order Fullfillment",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"orderId\": \"{{orderId-rylan}}\",\n    \"itemStatus\": \"FULFILLED\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
+							"name": "PAID Customer Orders",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let jsonData = pm.response.json();",
+											"let orderIds = jsonData.map(order => order.orderId);",
+											"pm.collectionVariables.set(\"paidOrderIds\", orderIds);"
+										],
+										"type": "text/javascript",
+										"packages": {}
 									}
-								},
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
 								"url": {
-									"raw": "http://localhost:8800/api/item-details",
+									"raw": "http://localhost:8802/api/orders?status=PAID",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
-									"port": "8800",
+									"port": "8802",
 									"path": [
 										"api",
-										"item-details"
+										"orders"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "PAID"
+										}
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Order Shipment",
+							"name": "Orders To Fulfill",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let orderIds = pm.collectionVariables.get(\"paidOrderIds\") || \"[0]\";",
+											"",
+											"let currentOrderId = orderIds.shift();",
+											"pm.collectionVariables.set(\"orderId-paid\", currentOrderId);",
+											"pm.collectionVariables.set(\"paidOrderIds\", orderIds);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const orderIds = pm.collectionVariables.get(\"paidOrderIds\") || \"[0]\";",
+											"",
+											"if (orderIds && orderIds.length > 0){",
+											"    pm.execution.setNextRequest(\"Orders To Fulfill\");",
+											"} else {",
+											"     pm.execution.setNextRequest(null);",
+											"}",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"orderId\": \"{{orderId-rylan}}\",\n    \"itemStatus\": \"SHIPPED\"\n}",
+									"raw": "{\n    \"orderId\": \"{{orderId-paid}}\",\n    \"itemStatus\": \"FULFILLED\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -667,74 +608,117 @@
 							"response": []
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "Snack Customer Orders",
-			"item": [
-				{
-					"name": "Brady's Order",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8802/api/orders/{{orderId-brady}}",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8802",
-							"path": [
-								"api",
-								"orders",
-								"{{orderId-brady}}"
-							]
-						}
-					},
-					"response": []
 				},
 				{
-					"name": "Oakley's Order",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8802/api/orders/{{orderId-oakley}}",
-							"protocol": "http",
-							"host": [
-								"localhost"
+					"name": "Ship Orders",
+					"item": [
+						{
+							"name": "FULFILLED Customer Orders",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let jsonData = pm.response.json();",
+											"let orderIds = jsonData.map(order => order.orderId);",
+											"pm.collectionVariables.set(\"fulfilledOrderIds\", orderIds);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
 							],
-							"port": "8802",
-							"path": [
-								"api",
-								"orders",
-								"{{orderId-oakley}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Rylan's Order",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8802/api/orders/{{orderId-rylan}}",
-							"protocol": "http",
-							"host": [
-								"localhost"
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8802/api/orders?status=FULFILLED",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8802",
+									"path": [
+										"api",
+										"orders"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "FULFILLED"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Orders to Ship",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let orderIds = pm.collectionVariables.get(\"fulfilledOrderIds\") || \"[0]\";",
+											"",
+											"let currentOrderId = orderIds.shift();",
+											"console.log(currentOrderId)",
+											"pm.collectionVariables.set(\"orderId-fulfilled\", currentOrderId);",
+											"pm.collectionVariables.set(\"fulfilledOrderIds\", orderIds);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let orderIds = pm.collectionVariables.get(\"fulfilledOrderIds\") || \"[0]\";",
+											"",
+											"if (orderIds && orderIds.length > 0){",
+											"    pm.execution.setNextRequest(\"Orders to Ship\");",
+											"} else {",
+											"     pm.execution.setNextRequest(null);",
+											"}",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
 							],
-							"port": "8802",
-							"path": [
-								"api",
-								"orders",
-								"{{orderId-rylan}}"
-							]
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"orderId\": \"{{orderId-fulfilled}}\",\n    \"itemStatus\": \"SHIPPED\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8800/api/item-details",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8800",
+									"path": [
+										"api",
+										"item-details"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
 					"name": "PENDING Customer Orders",
@@ -763,58 +747,6 @@
 					"response": []
 				},
 				{
-					"name": "PAID Customer Orders",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8802/api/orders?status=PAID",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8802",
-							"path": [
-								"api",
-								"orders"
-							],
-							"query": [
-								{
-									"key": "status",
-									"value": "PAID"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "FULFILLED Customer Orders",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8802/api/orders?status=FULFILLED",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8802",
-							"path": [
-								"api",
-								"orders"
-							],
-							"query": [
-								{
-									"key": "status",
-									"value": "FULFILLED"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "SHIPPED Customer Orders",
 					"request": {
 						"method": "GET",
@@ -835,6 +767,69 @@
 									"key": "status",
 									"value": "SHIPPED"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Brady's Recent Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders/{{orderId-brady}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders",
+								"{{orderId-brady}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Oakley's Recent Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders/{{orderId-oakley}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders",
+								"{{orderId-oakley}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rylan's Recent Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8802/api/orders/{{orderId-rylan}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8802",
+							"path": [
+								"api",
+								"orders",
+								"{{orderId-rylan}}"
 							]
 						}
 					},
@@ -883,6 +878,22 @@
 		},
 		{
 			"key": "orderId-rylan",
+			"value": ""
+		},
+		{
+			"key": "orderId-paid",
+			"value": ""
+		},
+		{
+			"key": "paidOrderIds",
+			"value": ""
+		},
+		{
+			"key": "orderId-fulfilled",
+			"value": ""
+		},
+		{
+			"key": "fulfilledOrderIds",
 			"value": ""
 		}
 	]
