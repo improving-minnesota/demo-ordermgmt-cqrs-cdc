@@ -22,6 +22,9 @@ buildApps() {
   echo "Build Snack Customer Orders"
   (cd ./snacks-unlimited-order-mgmt/snack-customer-orders && ./gradlew clean docker)
 
+  echo "Build Snickers Promotion App"
+    (cd ./snacks-unlimited-order-mgmt/snickers-promotion-app && docker build -t tlapps/play/snickers-promotion-app:snapshot .)
+
   echo "DONE!!"
 }
 
@@ -30,6 +33,7 @@ startAppsWithKStreams() {
 }
 
 startAppsFlinkSQL () {
+  docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d snickers-promotion-app
   docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d snack-order-commands
   docker compose --file ./docker/docker-compose-apps.yml --project-name apps up -d snack-customer-orders
 

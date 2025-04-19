@@ -9,6 +9,14 @@ networks:
     external: true
 
 services:
+  snickers-promotion-app:
+    container_name: snickers-promotion-app
+    image: tlapps/play/snickers-promotion-app:snapshot
+    networks:
+      - apps
+    ports:
+      - "3000:3000"
+
   snack-order-commands:
     container_name: snack-order-commands
     image: tlapps/play/snack-order-commands:snapshot

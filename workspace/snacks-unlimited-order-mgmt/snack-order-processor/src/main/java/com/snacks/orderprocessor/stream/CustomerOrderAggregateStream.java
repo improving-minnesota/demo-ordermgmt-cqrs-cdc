@@ -291,7 +291,12 @@ public class CustomerOrderAggregateStream {
         if (foundIndex == -1) {
             orderItemList.add(orderItem);
         } else {
-            orderItemList.set(foundIndex, orderItem);
+            // Only replace the item if it is a promoted/higher status (REQUESTED < FULFILLED < SHIPPED)
+            // This will fix any out-of-order issues with the item commands
+            ItemDetailRecord foundItem = orderItemList.get(foundIndex);
+            if (Integer.parseInt(orderItem.itemStatus()) > Integer.parseInt(foundItem.itemStatus())) {
+                orderItemList.set(foundIndex, orderItem);
+            }
         }
 
         return orderItemList;
