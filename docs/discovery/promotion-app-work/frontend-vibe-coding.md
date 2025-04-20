@@ -15,6 +15,7 @@
       - [Phase 1 - Create Screen Flow and Layout](#phase-1---create-screen-flow-and-layout)
         - [Result](#result)
       - [Phase 2 - Integrate with Snack Command APIs](#phase-2---integrate-with-snack-command-apis)
+        - [Result](#result-1)
 
 <!-- /code_chunk_output -->
 
@@ -101,7 +102,7 @@ Using Cascade - Write Mode with*Claude 3.7 Sonnet (Thinking)*
 
 #### Phase 1 - Create Screen Flow and Layout
 
-[Prom](./vibe-coding-conversations/promotion-app-phase1.md)
+[Phase 1 Conversation](./vibe-coding-conversations/promotion-app-phase1.md)
 
 ##### Result
 
@@ -110,3 +111,15 @@ Fully functioning page with cards and a swipe navigation flow that matched this 
 ![](./promotion-wireframe.png)
 
 #### Phase 2 - Integrate with Snack Command APIs
+
+[Phase 2 Conversation](./vibe-coding-conversations/promotion-app-phase2.md)
+
+##### Result
+
+* Implementation of the API proxied routes for the Snack Order Commands
+
+* Full refactor of the screens
+
+* Configuration for isDevelopment and useMockData for local testing
+
+* Ready for final integration testing 

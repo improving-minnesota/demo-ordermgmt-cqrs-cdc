@@ -1,127 +1,127 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
-// Screen components
-const PromotionScreen = ({ onNext }: { onNext: () => void }) => (
-  <motion.div
-    className="card"
-    initial={{ opacity: 0, x: 300 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: -300 }}
-    transition={{ duration: 0.5 }}
-  >
-    <h1 className="card-title">Promotion</h1>
-    <div className="card-image-container">
-      <Image
-        src="/imgs/item-snickers.svg"
-        alt="Snickers"
-        width={250}
-        height={250}
-        className="card-image"
-      />
-    </div>
-    <button
-      onClick={onNext}
-      className="card-button"
-    >
-      WISH I had a Snickers
-    </button>
-  </motion.div>
-);
+// Import UI components
+import ErrorAlert from "./components/ui/ErrorAlert";
 
-const LocationScreen = ({ onNext }: { onNext: () => void }) => (
-  <motion.div
-    className="card"
-    initial={{ opacity: 0, x: 300 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: -300 }}
-    transition={{ duration: 0.5 }}
-  >
-    <h1 className="card-title">Where are You?</h1>
-    <div className="card-image-container">
-      <Image
-        src="/imgs/location.png"
-        alt="Location"
-        width={250}
-        height={250}
-        className="card-image"
-      />
-    </div>
-    <button
-      onClick={onNext}
-      className="card-button"
-    >
-      HERE I am
-    </button>
-  </motion.div>
-);
-
-const PaymentScreen = ({ onNext }: { onNext: () => void }) => (
-  <motion.div
-    className="card"
-    initial={{ opacity: 0, x: 300 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: -300 }}
-    transition={{ duration: 0.5 }}
-  >
-    <h1 className="card-title">Penny on Us!!</h1>
-    <div className="card-image-container">
-      <Image
-        src="/imgs/penny.png"
-        alt="Penny"
-        width={250}
-        height={250}
-        className="card-image"
-      />
-    </div>
-    <button
-      onClick={onNext}
-      className="card-button"
-    >
-      Complete WISH
-    </button>
-  </motion.div>
-);
-
-const WishSentScreen = () => (
-  <motion.div
-    className="card"
-    initial={{ opacity: 0, x: 300 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: -300 }}
-    transition={{ duration: 0.5 }}
-  >
-    <h1 className="card-title">Wish Sent...</h1>
-    <div className="card-image-container">
-      <Image
-        src="/imgs/wish.png"
-        alt="Wish"
-        width={250}
-        height={250}
-        className="card-image"
-      />
-    </div>
-    <p className="card-text">Good Luck!!</p>
-  </motion.div>
-);
+// Import screen components
+import PromotionScreen from "./components/screens/PromotionScreen";
+import LocationScreen from "./components/screens/LocationScreen";
+import PaymentScreen from "./components/screens/PaymentScreen";
+import WishSentScreen from "./components/screens/WishSentScreen";
 
 export default function Home() {
   const [currentScreen, setCurrentScreen] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [userName, setUserName] = useState("");
+  const [orderId, setOrderId] = useState("");
 
-  const handleNext = () => {
-    setCurrentScreen((prev) => prev + 1);
+  const callApi = async (endpoint: string, requestData = {}) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      const responseData = await response.json();
+      
+      if (!response.ok || !responseData.success) {
+        throw new Error(responseData.message || 'Something went wrong');
+      }
+      
+      // Store orderId if it exists in the response
+      if (endpoint === 'promotion' && responseData.data && responseData.data.orderId) {
+        console.log('Order ID received:', responseData.data.orderId);
+        setOrderId(responseData.data.orderId);
+      }
+      
+      // If successful, move to next screen
+      setCurrentScreen((prev) => prev + 1);
+    } catch (err) {
+      console.error(`API Error (${endpoint}):`, err);
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePromotionNext = () => {
+    const promotionData = {
+      orderId: "",
+      items: [
+        {
+          itemId: "1",
+          itemName: "Snickers",
+          price: 0.01,
+          quantity: 1
+        }
+      ]
+    };
+    callApi('promotion', promotionData);
+  };
+
+  const handleLocationNext = () => {
+    // Only proceed if userName is not empty
+    if (userName.trim()) {
+      // Format the location data according to the API requirements
+      const locationData = {
+        orderId: orderId,
+        customerName: userName,
+        customerAddress: "2115 Summit Ave.",
+        zipCode: "55105",
+        latitude: 44.9374829167,
+        longitude: -93.1893875758
+      };
+      
+      callApi('location', locationData);
+    }
+  };
+
+  const handlePaymentNext = () => {
+    // Format the payment data according to the API requirements
+    const paymentData = {
+      orderId: orderId,
+      paymentType: "Credit Card",
+      creditCardType: "Magical Visa",
+      creditCardNumber: "7777-7777-7777-7777",
+      amount: 0.01
+    };
+    
+    callApi('payment', paymentData);
+  };
+
+  const clearError = () => {
+    setError(null);
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#005596] p-4">
+      {error && <ErrorAlert message={error} onClose={clearError} />}
+      
       <div className="w-full max-w-md relative overflow-hidden">
         <AnimatePresence mode="wait">
-          {currentScreen === 0 && <PromotionScreen key="promotion" onNext={handleNext} />}
-          {currentScreen === 1 && <LocationScreen key="location" onNext={handleNext} />}
-          {currentScreen === 2 && <PaymentScreen key="payment" onNext={handleNext} />}
+          {currentScreen === 0 && (
+            <PromotionScreen key="promotion" onNext={handlePromotionNext} isLoading={isLoading} />
+          )}
+          {currentScreen === 1 && (
+            <LocationScreen 
+              key="location" 
+              onNext={handleLocationNext} 
+              isLoading={isLoading} 
+              userName={userName}
+              setUserName={setUserName}
+            />
+          )}
+          {currentScreen === 2 && (
+            <PaymentScreen key="payment" onNext={handlePaymentNext} isLoading={isLoading} />
+          )}
           {currentScreen === 3 && <WishSentScreen key="wish-sent" />}
         </AnimatePresence>
       </div>
