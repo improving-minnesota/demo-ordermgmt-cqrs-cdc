@@ -40,7 +40,7 @@ This demo highlights a CDC-CQRS pipeline between a normalized relational databas
 The [Snacks Unlimited "Store" source code](./workspace/snacks-unlimited-order-mgmt) is centered around three microservices: 
 * snack-order-commands
 * snack-order-processor
-* snack-customer-orders. 
+* snack-customer-orders
 
 These services are implemented as Spring-Boot applications in Java.
 The `snack-order-commands` exposes API REST endpoints which persist item-details, shipping-info, and payment in their respective tables on MySQL database. 
@@ -50,7 +50,11 @@ Debezium tails the MySQL bin logs to capture any events in both these tables and
 These topics are consumed by `snack-order-processor` which is a Kafka-Streams application that joins data from these topics to create an Order-Aggregate (_CustomerOrder_) 
 object which is then published to a `customer-order-aggregate` topic. 
 
-This topic is consumed by MongoDB Sink Connector and the data is persisted in MongoDB which is served by `snack-customer-orders`service.
+NOTE: The `snack-order-processor` is a Kafka-Streams application. The source code also includes a Flink SQL Job
+that can be used as an alternative to Kafka-Streams. The Flink SQL job defined in `snack-order-flinksql` also joins data to create a Customer Order Aggregate
+that is inserted into the `customer-order-aggregate` topic.
+
+This `customer-order-aggregate` topic is consumed by MongoDB Sink Connector and the data is persisted in MongoDB which is served by `snack-customer-orders`service.
 
 ## References
 

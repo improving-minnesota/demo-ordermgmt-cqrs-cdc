@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --card-bg: #f8f9ff;
+  --button-bg: #4a148c;
+  --button-text: white;
+  --card-border: #e0e0e0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --card-bg: #f0f4ff; /* Light background for dark mode too */
+    --button-bg: #7b1fa2;
+    --button-text: white;
+    --card-border: #d0d0d0;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Card Styles */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fafcff !important; /* Force light background */
+  color: #333333 !important; /* Force dark text for readability */
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  padding: 2rem;
+  width: 100%;
+  min-height: 450px;
+  margin: 0 auto;
+  border: 1px solid #e0e7ff;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #000000 !important;
+  font-family: var(--font-caveat), cursive;
+  letter-spacing: 0.5px;
+}
+
+.card-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem 0;
+  width: 100%;
+  height: 250px;
+}
+
+.card-image {
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.card-button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  margin-top: 1.5rem;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: var(--font-caveat), cursive;
+}
+
+.card-button:hover {
+  background-color: #7b1fa2;
+  transform: translateY(-2px);
+}
+
+.card-button:active {
+  transform: translateY(0);
+}
+
+.card-text {
+  margin-top: 1.5rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: #000000 !important;
+  font-family: var(--font-caveat), cursive;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 1.5rem;
+    min-height: 400px;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+  }
+  
+  .card-image-container {
+    height: 200px;
+  }
+  
+  .card-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}

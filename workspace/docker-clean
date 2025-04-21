@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#~ START functions -----------------------------------------------------------------------
+d-rm-dangling-images() {
+  docker rmi $(docker images -f "dangling=true" -q)
+}
+docker-rm-dead-containers() {
+  # Make sure not to remove specific stopped containers
+  (docker rm $(docker ps -a | grep -v " minikube\|jenkins\|portainer\|CONTAINER" | awk '{print $1}'))
+}
+d-rm-dangling-volumes() {
+  docker volume rm $(docker volume ls -qf dangling=true | grep -v "pv-")
+}
+
+#~ END functions ---------------------------------------------------------------------------
+
+#~ main body of the script --------------------------------------------------------------------
+d-rm-dangling-images
+docker-rm-dead-containers
+d-rm-dangling-volumes
+#~ END OF FILE --------------------------------------------------------------------------------
