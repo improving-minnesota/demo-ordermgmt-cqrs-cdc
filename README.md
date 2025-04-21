@@ -171,6 +171,7 @@ $ ./platform kafka|redpanda stop
 
 ```
 $ ./apps build
+$ ./docker-clean
 ```
 
 **Start the Apps with Kafka Streams Processing**
@@ -209,6 +210,15 @@ $ ./apps stop
 $ ./apps cli flinksql
 ```
 
+### Stop and Clean the Playground
+The following commands will stop the docker containers and perform a docker cleanup to remove/prune any dangling docker images, containers, and volumes.
+
+```
+$ ./apps stop
+$ ./platform kafka|redpanda stop
+$ ./docker-clean
+```
+
 ### Creating the Debezium CDC MySQL Source Connector (order-command-db)
 
 * In Postman run the _POST Create MySQL CDC Connector_ Request
@@ -221,7 +231,7 @@ $ ./apps cli flinksql
 
 ## DEMO
 
-### Pre-Requisite: Startup Platform and Apps
+### PRE: Start Platform and Apps
 
 ```
 -- Demo with Kafka Streams
@@ -238,7 +248,14 @@ $ ./platform redpanda|kafka start
 $ ./apps start --flinksql
 ```
 
-### API-Driven Demo (POSTMAN)
+### POST: Stop Platform and Apps
+```
+$ ./apps stop
+$ ./platform kafka|redpanda stop
+$ ./docker-clean
+```
+
+### DEMO: API-Driven Demo (POSTMAN)
 
 See [Snacks Unlimited - Postman Collection](./workspace/postman/UC-Snacks%20Unlimited.postman_collection.json).
 
@@ -271,7 +288,7 @@ See [Snacks Unlimited - Postman Collection](./workspace/postman/UC-Snacks%20Unli
   
 --- DEMO COMPLETE ---
 
-### Snickers Promotion App
+### DEMO: Snickers Promotion App
 
 * 1- Open Browser to http://{host}:3000
   * Click "WISH I had a Snickers"
