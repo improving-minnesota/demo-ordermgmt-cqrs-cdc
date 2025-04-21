@@ -6,9 +6,9 @@
 - [Snickers Promotion App - Development Conversation](#snickers-promotion-app---development-conversation)
   - [Phase 2: API Integration Implementation](#phase-2-api-integration-implementation)
     - [Initial Setup](#initial-setup)
-    - [Promotion API Implementation](#promotion-api-implementation)
-    - [Location Screen Enhancements](#location-screen-enhancements)
-    - [Payment API Implementation](#payment-api-implementation)
+    - [Promotion Screen and API Enhancements](#promotion-screen-and-api-enhancements)
+    - [Location Screen and API Enhancements](#location-screen-and-api-enhancements)
+    - [Payment Screen and API Enhancements](#payment-screen-and-api-enhancements)
     - [Code Organization](#code-organization)
     - [State Management](#state-management)
     - [Development/Production Switching](#developmentproduction-switching)
@@ -75,7 +75,7 @@
 - Reviewed existing code structure, identifying 4-screen flow (Promotion, Location, Payment, Wish Confirmation)
 - Created API routes directory structure for Next.js backend
 
-### Promotion API Implementation
+### Promotion Screen and API Enhancements
 - Created server-side proxy API route at `/api/promotion/route.ts`
 - Connected to remote endpoint: `http://snack-order-commands:8800/api/item-details`
 - Implemented mock/development mode with configuration system
@@ -95,7 +95,7 @@
 }
 ```
 
-### Location Screen Enhancements
+### Location Screen and API Enhancements
 - Added input field for user name with validation
 - Button disabled until name is entered
 - Implemented server-side proxy for location API 
@@ -112,7 +112,7 @@
 }
 ```
 
-### Payment API Implementation
+### Payment Screen and API Enhancements
 - Created server-side proxy for payment processing
 - Connected to remote endpoint: `http://snack-order-commands:8800/api/payment`
 - JSON payload with credit card details:
