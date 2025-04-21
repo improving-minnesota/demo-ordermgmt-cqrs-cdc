@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b975ad8b-7788-4d62-a13e-966c93effc81",
+		"_postman_id": "55e6f355-ae66-412a-9243-8b456f82b0ba",
 		"name": "UC: Snacks Unlimited (DDD-CQRS-CDC)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "9857394"
@@ -27,10 +27,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8083/connectors/",
+									"raw": "http://{{snacks-unlimited-host}}:8083/connectors/",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8083",
 									"path": [
@@ -47,10 +47,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8083/connectors/order-command-db-connector/status",
+									"raw": "http://{{snacks-unlimited-host}}:8083/connectors/order-command-db-connector/status",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8083",
 									"path": [
@@ -77,10 +77,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8083/connectors/order-command-db-connector",
+									"raw": "http://{{snacks-unlimited-host}}:8083/connectors/order-command-db-connector",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8083",
 									"path": [
@@ -111,10 +111,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8083/connectors/",
+									"raw": "http://{{snacks-unlimited-host}}:8083/connectors/",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8083",
 									"path": [
@@ -131,10 +131,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8083/connectors/order-app-mongo-sink-connector/status",
+									"raw": "http://{{snacks-unlimited-host}}:8083/connectors/order-app-mongo-sink-connector/status",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8083",
 									"path": [
@@ -161,10 +161,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8083/connectors/order-app-mongo-sink-connector",
+									"raw": "http://{{snacks-unlimited-host}}:8083/connectors/order-app-mongo-sink-connector",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8083",
 									"path": [
@@ -176,6 +176,110 @@
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Snickers Promotion",
+			"item": [
+				{
+					"name": "Snickers Item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set('orderId-promotion', pm.response.json().orderId)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"\",\n    \n    \"items\": [\n        {\n            \"itemId\": \"1\",\n            \"itemName\": \"Snickers\",\n            \"price\": 0.01,\n            \"quantity\": 1\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{snacks-unlimited-host}}:8800/api/item-details",
+							"protocol": "http",
+							"host": [
+								"{{snacks-unlimited-host}}"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"item-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Promotion Shipping Location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"{{orderId-promotion}}\",\n    \"customerName\": \"Customer-{{orderId-promotion}}\",\n    \"customerAddress\": \"2115 Summit Ave.\",\n    \"zipCode\": \"55105\",\n    \"latitude\": 44.9374829167,\n    \"longitude\": -93.1893875758\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{snacks-unlimited-host}}:8800/api/shipping-location",
+							"protocol": "http",
+							"host": [
+								"{{snacks-unlimited-host}}"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"shipping-location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Promotion Payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"{{orderId-promotion}}\",\n    \"paymentType\": \"Credit Card\",\n    \"creditCardType\": \"Promotion Visa\",\n    \"creditCardNumber\": \"7777-7777-7777-7777\",\n    \"amount\": 0.01\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{snacks-unlimited-host}}:8800/api/payment",
+							"protocol": "http",
+							"host": [
+								"{{snacks-unlimited-host}}"
+							],
+							"port": "8800",
+							"path": [
+								"api",
+								"payment"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -212,10 +316,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/item-details",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/item-details",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -241,10 +345,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/shipping-location",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/shipping-location",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -270,10 +374,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/payment",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/payment",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -316,10 +420,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/item-details",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/item-details",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -345,10 +449,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/shipping-location",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/shipping-location",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -374,10 +478,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/payment",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/payment",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -420,10 +524,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/item-details",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/item-details",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -449,10 +553,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/shipping-location",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/shipping-location",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -478,10 +582,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/payment",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/payment",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -522,10 +626,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8802/api/orders?status=PAID",
+									"raw": "http://{{snacks-unlimited-host}}:8802/api/orders?status=PAID",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8802",
 									"path": [
@@ -593,10 +697,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/item-details",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/item-details",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -632,10 +736,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8802/api/orders?status=FULFILLED",
+									"raw": "http://{{snacks-unlimited-host}}:8802/api/orders?status=FULFILLED",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8802",
 									"path": [
@@ -704,10 +808,10 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8800/api/item-details",
+									"raw": "http://{{snacks-unlimited-host}}:8800/api/item-details",
 									"protocol": "http",
 									"host": [
-										"localhost"
+										"{{snacks-unlimited-host}}"
 									],
 									"port": "8800",
 									"path": [
@@ -726,10 +830,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8802/api/orders?status=PENDING",
+							"raw": "http://{{snacks-unlimited-host}}:8802/api/orders?status=PENDING",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{snacks-unlimited-host}}"
 							],
 							"port": "8802",
 							"path": [
@@ -752,10 +856,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8802/api/orders?status=SHIPPED",
+							"raw": "http://{{snacks-unlimited-host}}:8802/api/orders?status=SHIPPED",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{snacks-unlimited-host}}"
 							],
 							"port": "8802",
 							"path": [
@@ -778,10 +882,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8802/api/orders/{{orderId-brady}}",
+							"raw": "http://{{snacks-unlimited-host}}:8802/api/orders/{{orderId-brady}}",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{snacks-unlimited-host}}"
 							],
 							"port": "8802",
 							"path": [
@@ -799,10 +903,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8802/api/orders/{{orderId-oakley}}",
+							"raw": "http://{{snacks-unlimited-host}}:8802/api/orders/{{orderId-oakley}}",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{snacks-unlimited-host}}"
 							],
 							"port": "8802",
 							"path": [
@@ -820,10 +924,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8802/api/orders/{{orderId-rylan}}",
+							"raw": "http://{{snacks-unlimited-host}}:8802/api/orders/{{orderId-rylan}}",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{snacks-unlimited-host}}"
 							],
 							"port": "8802",
 							"path": [
@@ -846,10 +950,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8801/api/topology",
+							"raw": "http://{{snacks-unlimited-host}}:8801/api/topology",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{snacks-unlimited-host}}"
 							],
 							"port": "8801",
 							"path": [

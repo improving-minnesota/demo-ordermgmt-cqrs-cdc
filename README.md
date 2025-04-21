@@ -145,6 +145,7 @@ The "platform" consists of:
 
 * Confluent Platform (Docker) - Kafka, Kafka Connect
 * Apache Flink - SQL Client
+* Kafka Connectors for MySQL source and MongoDB sink
 * MySQL and "Adminer" (manage MySQL via browser)
 * MongoDB and Mongo Express (manage Mongo via browser)
 
@@ -163,6 +164,18 @@ $ ./platform kafka|redpanda start
 
 ```
 $ ./platform kafka|redpanda stop
+```
+
+**Create the MySQL source and MongoDB sink Kafka Connectors**
+
+*NOTE: platform containers must be started and ready.
+*NOTE: platform containers must be started and ready.
+```
+$ ./platform init-connectors
+Creating MySQL SourceConnector...
+201
+Creating MongoDB Sink Connector...
+201
 ```
 
 ### Spinning up Playground "Apps"
@@ -219,14 +232,6 @@ $ ./platform kafka|redpanda stop
 $ ./docker-clean
 ```
 
-### Creating the Debezium CDC MySQL Source Connector (order-command-db)
-
-* In Postman run the _POST Create MySQL CDC Connector_ Request
-
-### Creating the MongoDB Sink Connector (order aggregate store)
-
-* In Postman run the _POST Create MongoDB Sink Connector_ Request
-
 ---
 
 ## DEMO
@@ -238,6 +243,11 @@ $ ./docker-clean
 
 $ cd .workspace
 $ ./platform redpanda|kafka start
+$ ./platform init-connectors
+Creating MySQL SourceConnector...
+201
+Creating MongoDB Sink Connector...
+201
 $ ./apps start --kstreams
 ```
 ```

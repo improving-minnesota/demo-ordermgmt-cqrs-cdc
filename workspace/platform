@@ -6,6 +6,7 @@ echoCommands() {
 	echo "Usage:  These are valid commands"
   echo "platform kafka|redpanda start"
   echo "platform kafka|redpanda stop"
+  echo "platform init-connectors"
   echo ""
 }
 
@@ -25,6 +26,57 @@ stopRedpanda() {
   docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-redpanda.yml --file ./docker/docker-compose-flink.yml --project-name platform down -v
 }
 
+initConnectors() {
+  echo "Creating MySQL SourceConnector..."
+  curl -s -o /dev/null -w "%{http_code}\n" -X POST http://localhost:8083/connectors/ \
+    -H "Content-Type: application/json" \
+    -d '{
+      "name": "order-command-db-connector",
+      "config": {
+          "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+          "tasks.max": "1",
+          "topic.prefix": "order-command-server",
+          "database.hostname": "mysql_db_server",
+          "database.port": "3306",
+          "database.user": "order-command-user",
+          "database.password": "password",
+          "database.server.id": "142401",
+          "database.server.name": "order-command-server",
+          "database.whitelist": "order-command-db",
+          "table.whitelist": "order-command-db.payment, order-command-db.shipping_location,order-command-db.item_detail",
+          "schema.history.internal.kafka.bootstrap.servers": "broker:29092",
+          "schema.history.internal.kafka.topic": "dbhistory.order-command-db",
+          "include.schema.changes": "true",
+          "transforms": "unwrap",
+          "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState"
+      }
+  }'
+
+  echo "Creating MongoDB Sink Connector..."
+  curl -s -o /dev/null -w "%{http_code}\n" -X POST http://localhost:8083/connectors/ \
+    -H "Content-Type: application/json" \
+    -d '{
+      "name": "order-app-mongo-sink-connector",
+      "config": {
+          "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+          "topics": "customer-order-aggregate",
+          "connection.uri": "mongodb://mongo-user:password@mongodb_server:27017",
+          "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+          "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+          "value.converter.schemas.enable": false,
+          "database": "customer_order_db",
+          "collection": "customerOrder",
+          "document.id.strategy.overwrite.existing": "true",
+          "document.id.strategy": "com.mongodb.kafka.connect.sink.processor.id.strategy.ProvidedInKeyStrategy",
+          "transforms": "hk,hv",
+          "transforms.hk.type": "org.apache.kafka.connect.transforms.HoistField$Key",
+          "transforms.hk.field": "_id",
+          "transforms.hv.type": "org.apache.kafka.connect.transforms.HoistField$Value",
+          "transforms.hv.field": "customerOrder"
+      }
+  }'
+}
+
 #~ END functions ---------------------------------------------------------------------------
 
 
@@ -40,10 +92,8 @@ elif [[ $1 == "kafka" ]] && [[ $2 == "stop" ]]; then
 		stopKafka
 elif [[ $1 == "redpanda" ]] && [[ $2 == "stop" ]]; then
 		stopRedpanda
-elif [[ $1 == "flinksql" ]] && [[ $2 == "--job" ]]; then
-		runJobFlinkSQL
-elif [[ $1 == "flinksql" ]]; then
-		runFlinkSQL
+elif [[ $1 == "init-connectors" ]]; then
+		initConnectors
 else
 	echo "\nERROR:  See command usage\n"
 	echoCommands
