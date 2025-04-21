@@ -56,6 +56,13 @@ that is inserted into the `customer-order-aggregate` topic.
 
 This `customer-order-aggregate` topic is consumed by MongoDB Sink Connector and the data is persisted in MongoDB which is served by `snack-customer-orders`service.
 
+---
+
+The [Snacks Unlimited "Store" source code](./workspace/snacks-unlimited-order-mgmt) also includes a Next.js frontend application called `snickers-promotion-app`. This is a simple web application that submits order commands for a Snickers. 
+It is used for demo purposes.
+
+---
+
 ## References
 
 * Source Material
@@ -212,11 +219,9 @@ $ ./apps cli flinksql
 
 ---
 
-## DEMO: E2E Script
+## DEMO
 
-See [Snacks Unlimited - Postman Collection](./workspace/postman/UC-Snacks%20Unlimited.postman_collection.json).
-
-### Run Demo
+### Pre-Requisite: Startup Platform and Apps
 
 ```
 -- Demo with Kafka Streams
@@ -233,12 +238,26 @@ $ ./platform redpanda|kafka start
 $ ./apps start --flinksql
 ```
 
+### API-Driven Demo (POSTMAN)
+
+See [Snacks Unlimited - Postman Collection](./workspace/postman/UC-Snacks%20Unlimited.postman_collection.json).
+
 --- DEMO START ---
 
 * 1 - Create Kafka Connectors
+  * POST Create MySQL CDC Connector
+  * POST Create MongoDB Sink Connector
 
-* 2 - Create Customer Order (Snack Customer)
-  * POST Item Details
+* 2a - Brady's Order
+  * POST Snack Items
+  * POST Shipping Location
+  * POST Payment
+* 2b -Oakley's Order
+  * POST Snack Items
+  * POST Shipping Location
+  * POST Payment
+* 2c - Rylan's Order
+  * POST Snack Items
   * POST Shipping Location
   * POST Payment
 
@@ -251,6 +270,26 @@ $ ./apps start --flinksql
   * PUT Order Shipment 
   
 --- DEMO COMPLETE ---
+
+### Snickers Promotion App
+
+* 1- Open Browser to http://{host}:3000
+  * Click "WISH I had a Snickers"
+![Screen 1](./docs/images/snickers-1.png)
+  * Enter your name and Click "HERE I am"
+![Screen 1](./docs/images/snickers-2.png)
+  * Click "Complete WISH"
+![Screen 1](./docs/images/snickers-3.png)
+  * Your Snickers Wish is Sent...
+![Screen 1](./docs/images/snickers-4.png)
+
+* 2 - Fulfill Orders (Sam the Wizard)
+  * GET PAID Orders
+  * PUT Order Fulfillment
+
+* 3 - Ship Orders (Minions Delivery Team)
+  * GET FULFILLED Orders
+  * PUT Order Shipment
 
 ### Tools During Demo
 
