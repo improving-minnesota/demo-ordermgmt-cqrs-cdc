@@ -1,15 +1,46 @@
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=2 orderedList=false} -->
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=3 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
 - [Playground - DDD Aggregates w/ CDC and CQRS](#playground---ddd-aggregates-w-cdc-and-cqrs)
+  - [Elevator Pitch](#elevator-pitch)
+  - [What is in It?](#what-is-in-it)
   - [References](#references)
   - [The Story](#the-story)
+    - [Problem](#problem)
+    - [Domain Storytelling](#domain-storytelling)
+    - [Event Blueprinting](#event-blueprinting)
   - [Solution](#solution)
+    - [DDD Context Map](#ddd-context-map)
+    - [System Design: Righting Software - "The Method"](#system-design-righting-software---the-method)
+    - [C4 Modeling - Context View](#c4-modeling---context-view)
+    - [C4 Modeling - Container View](#c4-modeling---container-view)
+    - [Implementation: Kafka Streams Topology](#implementation-kafka-streams-topology)
+    - [Implementation: Flink SQL Job Overview](#implementation-flink-sql-job-overview)
   - [Playground Environment](#playground-environment)
-  - [DEMO: E2E Script](#demo-e2e-script)
+    - [Kafka-backed Playground](#kafka-backed-playground)
+    - [Redpanda-backed Playground](#redpanda-backed-playground)
+    - [Spinning up Playground "Platform"](#spinning-up-playground-platform)
+    - [Spinning up Playground "Apps"](#spinning-up-playground-apps)
+    - [Stop and Clean the Playground](#stop-and-clean-the-playground)
+  - [DEMO](#demo)
+    - [PRE: Start Platform and Apps](#pre-start-platform-and-apps)
+    - [POST: Stop Platform and Apps](#post-stop-platform-and-apps)
+    - [DEMO: API-Driven Demo (POSTMAN)](#demo-api-driven-demo-postman)
+    - [DEMO: Snickers Promotion App](#demo-snickers-promotion-app)
+    - [Tools During Demo](#tools-during-demo)
+  - [From Playground to Arena (i.e. The Cloud)](#from-playground-to-arena-ie-the-cloud)
+    - [Deploy on an AWS EC2 Instance](#deploy-on-an-aws-ec2-instance)
   - [Development Notes (Step-by-Step)](#development-notes-step-by-step)
+    - [Build: snack-order-commands (Write)](#build-snack-order-commands-write)
+    - [Build: snack-order-processor (DDD Aggregate)](#build-snack-order-processor-ddd-aggregate)
+    - [Build: snack-customer-orders (Read)](#build-snack-customer-orders-read)
+    - [Setup: Connectors](#setup-connectors)
   - [Development Troubleshooting Notes](#development-troubleshooting-notes)
+    - [UnsatisfiedDependencyException](#unsatisfieddependencyexception)
+    - [Dependency error configuring in-memory database for @DataJpaTest](#dependency-error-configuring-in-memory-database-for-datajpatest)
+    - [DDL error when running @DataJpaTest](#ddl-error-when-running-datajpatest)
+    - [Debezium MySQLConnector Error: Access denied; you need the SUPER, RELOAD, or FLUSH_TABLES privilege for this operation](#debezium-mysqlconnector-error-access-denied-you-need-the-super-reload-or-flush_tables-privilege-for-this-operation)
   - [My Discoveries (What I Learned)](#my-discoveries-what-i-learned)
 
 <!-- /code_chunk_output -->
@@ -359,6 +390,139 @@ Flink SQL>
   
 * [MySQL Database](http://localhost:8180/)
 * [MongoDB Database](http://localhost:8181/)
+
+---
+
+## From Playground to Arena (i.e. The Cloud)
+
+### Deploy on an AWS EC2 Instance
+
+#### Single EC2 Instance Specs
+
+The EC2 instance needs to have enough CPU, Memory and Storage to run the 12-14 *Snacks Unlimited* containers. 
+
+Based on local *Docker Desktop* stats the following EC2 instance will be a good fit for running the demo containers on AWS. 
+
+```
+t3.large
+- vCPUs: 2
+- Memory: 8GB
+- Storage: 30GB
+```
+
+#### Sandbox Setup Steps
+
+**Launch EC2 Instance**
+
+```
+Go to EC2 Dashboard → Instances → Launch Instance
+
+Name: demo-snacks-unlimited
+AMI: Amazon Linux 2 AMI (HVM), SSD Volume Type
+
+Instance type: t3.large
+Key pair: Create a New Key pair `demo-snacks-unlimited`
+
+Network settings:
+- Default VPN
+- Security Group: demo-snacks-unlimited-sg
+- Auto Assign Public IP
+- Allow SSH (port 22) from your IP
+- Allow Next.js App (port 3000) from your IP
+- Allow Snacks Unlimited APIs (port 8800-8802) from your IP
+
+Storage: 30 GB
+
+Launch
+```
+
+**Connect to EC2**
+
+```
+ssh -i /path/to/your-key.pem ec2-user@<public-ip>
+```
+
+**Initial Setup Scripts**
+
+```
+Install Git and Docker
+$ sudo dnf update -y
+$ sudo yum update -y
+$ sudo yum install git -y
+
+$ sudo dnf install -y docker
+$ sudo systemctl enable docker
+$ sudo systemctl start docker
+$ sudo usermod -aG docker ec2-user
+
+Test Docker
+$ docker version
+$ docker info
+
+Install Docker Compose
+$ mkdir -p ~/.docker/cli-plugins
+$ curl -SL https://github.com/docker/compose/releases/download/v2.24.1/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+$ docker compose version
+
+Install Java
+$ sudo dnf install -y java-17-amazon-corretto
+
+$ java --version
+OpenJDK Runtime Environment Corretto-17.0.14.7.1 (build 17.0.14+7-LTS)
+OpenJDK 64-Bit Server VM Corretto-17.0.14.7.1 (build 17.0.14+7-LTS, mixed mode, sharing)
+
+```
+
+**Clone Snacks Unlimited Demo**
+
+```
+$ mkdir ~/demos
+$ cd ~/demos
+$ git clone https://github.com/improving-minnesota/demo-ordermgmt-cqrs-cdc.git snacks-unlimited-demo
+```
+
+#### Sandbox Platform & Apps
+
+```
+$ cd ~/demos/snacks-unlimited-demo/workspace
+```
+
+**Build App Images**
+
+```
+$ ./apps build
+$ ./docker-clean
+```
+
+**Startup the Platform and Apps**
+
+```
+$ ./platform redpanda|kafka start
+
+MySQL Source Connector and MongoDB Sink Connector
+$ ./platform init-connectors
+
+$ ./apps start --kstreams|--flinksql
+```
+
+**Monitor Orders w/ FlinkSQL Client**
+
+```
+$ ./apps cli flinksql
+
+// ALL customer order aggregates
+Flink SQL> select orderId, orderStatus, shippingLocation.customerName from customer_order_aggregate;
+
+// PAID customer order aggregates
+Flink SQL> select orderId, orderStatus, shippingLocation.customerName from customer_order_aggregate where orderStatus = 'PAID';
+```
+
+
+
+
+
+
+
 
 ---
 

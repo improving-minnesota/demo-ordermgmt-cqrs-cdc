@@ -10,7 +10,7 @@ But what could they do? Suddenly, Pop remembered meeting Sam, the Snack Wizard, 
 
 Pop still had Sam's phone number and called him. Sam was happy to hear from Pop again - he always liked Pop. He listened and wanted to help make this dream come true. 
 
-"But I have a problem." said Sam. "To spread my magic around the world, I need to know WHAT snacks to magically appear and WHERE to magically send them. Oh, AND I need to collect a small fee to keep the magic alive."
+"But I have a problem." said Sam. "To spread my magic around the world, I need to know WHAT snacks to make magically appear and WHERE to magically send them. Oh, AND I need to collect a small fee to keep the magic alive."
 
 "What if you had an online snack store where kids could make their snack wishes, send their location, and pay the fee digitally?", asked Pop.
 
