@@ -51,4 +51,16 @@ public class CustomerOrderController {
 
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("api/orders/snickers-promotion")
+    public ResponseEntity<List<CustomerOrder>> findTop20SnickersPromotions() {
+        log.info("Entering OrderController.findTop20SnickersPromotions()");
+
+        List<CustomerOrder> customerOrders = customerOrderService.findTop20SnickersPromotions();
+        if (customerOrders != null) {
+            return new ResponseEntity<>(customerOrders, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NOT_FOUND);
+    }
 }

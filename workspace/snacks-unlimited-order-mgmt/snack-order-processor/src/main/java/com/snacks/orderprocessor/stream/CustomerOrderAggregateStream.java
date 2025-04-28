@@ -37,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -176,9 +177,9 @@ public class CustomerOrderAggregateStream {
         // Joining the two tables: shippingLocationKTable and itemsKTable (need items and shipping details)
         // Left Join Customer Order with Items, Shipping, and Payment
         ValueJoiner<ShippingLocationRecord, ArrayList<ItemDetailRecord>, CustomerOrder> shippingAndItemListJoiner =
-                (shippingLocationRecord, itemRecordList) -> buildInitialCustomerOrder(shippingLocationRecord, itemRecordList);
+                this::buildInitialCustomerOrder;
         ValueJoiner<CustomerOrder, PaymentRecord, CustomerOrder> customerOrderWithPaymentJoiner =
-                (customerOrder, paymentRecord) -> buildCustomerOrderWithPayment(customerOrder, paymentRecord);
+                this::buildCustomerOrderWithPayment;
 
         KTable<String, CustomerOrder> customerOrderKTable = shippingLocationKTable
                 .join(itemsKTable, shippingAndItemListJoiner)
@@ -328,6 +329,8 @@ public class CustomerOrderAggregateStream {
         }
 
         CustomerOrder order = new CustomerOrder(orderId, shippingLocation, items);
+        order.setModifiedDate(LocalDateTime.now());
+
         return order;
     }
 
@@ -343,6 +346,8 @@ public class CustomerOrderAggregateStream {
 
 
             CustomerOrder customerOrderWithPayment = new CustomerOrder(orderId, customerOrder.getShippingLocation(), payment, customerOrder.getItems());
+            customerOrderWithPayment.setModifiedDate(LocalDateTime.now());
+
             return customerOrderWithPayment;
         }
 

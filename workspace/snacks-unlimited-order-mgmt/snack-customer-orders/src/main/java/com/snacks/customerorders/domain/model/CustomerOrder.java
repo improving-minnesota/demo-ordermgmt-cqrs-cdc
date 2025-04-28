@@ -1,21 +1,19 @@
 package com.snacks.customerorders.domain.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class CustomerOrder {
 
     private String orderId;
-
     private String orderStatus;
-
-    private ShippingLocation shippingLocation;
-
-    private Payment payment;
+    private LocalDateTime modifiedDate;
 
     private List<ItemDetail> items;
+    private ShippingLocation shippingLocation;
+    private Payment payment;
 
     // region Getters and Setters
-
     public String getOrderId() {
         return orderId;
     }
@@ -30,6 +28,14 @@ public class CustomerOrder {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(LocalDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public ShippingLocation getShippingLocation() {

@@ -82,6 +82,7 @@ CREATE TABLE shipping_location (
 CREATE TABLE customer_order_aggregate (
     orderId STRING PRIMARY KEY NOT ENFORCED, -- upsert-kafka requires a primary key
     orderStatus STRING,
+    modifiedDate STRING,
     items ARRAY<
         ROW<
             itemId STRING,

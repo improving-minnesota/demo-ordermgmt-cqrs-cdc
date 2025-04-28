@@ -8,6 +8,7 @@ SELECT
         WHEN o.item_status = 2 THEN 'SHIPPED'
         ELSE 'PAID'
     END,
+    DATE_FORMAT(CURRENT_TIMESTAMP, 'yyyy-MM-dd''T''HH:mm:ss') AS modifiedDate,
     ARRAY_AGG(ROW(
             o.item_id,
             o.item_name,

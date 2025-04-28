@@ -1,0 +1,75 @@
+{
+  "schema": {
+    "type": "struct",
+    "fields": [
+      {
+        "type": "string",
+        "optional": false,
+        "field": "item_id"
+      },
+      {
+        "type": "string",
+        "optional": false,
+        "field": "order_id"
+      }
+    ],
+    "optional": false,
+    "name": "order-command-server.order-command-db.item_detail.Key"
+  },
+  "payload": {
+    "item_id": "1",
+    "order_id": "6d4238f3-537a-443e-bbd4-0927de6ba404"
+  }
+} ==> {
+  "schema": {
+    "type": "struct",
+    "fields": [
+      {
+        "type": "string",
+        "optional": false,
+        "field": "item_id"
+      },
+      {
+        "type": "string",
+        "optional": false,
+        "field": "order_id"
+      },
+      {
+        "type": "string",
+        "optional": true,
+        "field": "item_name"
+      },
+      {
+        "type": "int16",
+        "optional": true,
+        "field": "item_status"
+      },
+      {
+        "type": "double",
+        "optional": true,
+        "field": "price"
+      },
+      {
+        "type": "int16",
+        "optional": true,
+        "field": "currency"
+      },
+      {
+        "type": "int32",
+        "optional": true,
+        "field": "quantity"
+      }
+    ],
+    "optional": false,
+    "name": "order-command-server.order-command-db.item_detail.Value"
+  },
+  "payload": {
+    "item_id": "1",
+    "order_id": "6d4238f3-537a-443e-bbd4-0927de6ba404",
+    "item_name": "Swedish Fish",
+    "item_status": 1,
+    "price": 0.01,
+    "currency": 0,
+    "quantity": 2
+  }
+}

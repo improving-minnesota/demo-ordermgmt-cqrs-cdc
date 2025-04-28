@@ -1,16 +1,22 @@
 package com.snacks.orderprocessor.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.snacks.orderprocessor.model.domain.value.ItemStatus;
 import com.snacks.orderprocessor.model.domain.value.OrderStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class CustomerOrder {
 
     private String orderId;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
+    private LocalDateTime modifiedDate;
+
+    private List<ItemDetail> orderItems;
     private ShippingLocation shippingLocation;
     private Payment payment;
-    private List<ItemDetail> orderItems;
 
     public CustomerOrder() {
     }
@@ -27,6 +33,19 @@ public class CustomerOrder {
         this.shippingLocation = shippingLocation;
         this.payment = payment;
     }
+
+    // region Setters for dates
+
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(LocalDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+
+    // endregion
 
     // region Derived Getters
     public OrderStatus getOrderStatus() {

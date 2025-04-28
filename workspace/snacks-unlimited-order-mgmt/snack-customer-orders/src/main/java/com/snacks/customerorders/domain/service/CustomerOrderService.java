@@ -52,4 +52,23 @@ public class CustomerOrderService {
 
         return customerOrders;
     }
+
+    public List<CustomerOrder> findTop20SnickersPromotions() {
+        log.info("Entering CustomerOrderService.findTop20SnickersPromotions()");
+        List<CustomerOrder> customerOrders = new ArrayList<>();
+
+        List<CustomerOrderDocument> foundCustomerOrderDocuments = customerOrderRepository.
+                findTop20ByCustomerOrderItemsItemNameContainingAndCustomerOrderPaymentCreditCardTypeOrderByCustomerOrderModifiedDateAsc(
+                        "Snickers",
+                "Magical Visa");
+
+        if (!ObjectUtils.isEmpty(foundCustomerOrderDocuments)) {
+            foundCustomerOrderDocuments.forEach(customerOrderDocument -> {
+                CustomerOrder customerOrder = customerOrderDocument.getCustomerOrder();
+                customerOrders.add(customerOrder);
+            });
+        }
+
+        return customerOrders;
+    }
 }

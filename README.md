@@ -1,4 +1,4 @@
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=3 orderedList=false} -->
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=5 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
@@ -31,11 +31,28 @@
     - [Tools During Demo](#tools-during-demo)
   - [From Playground to Arena (i.e. The Cloud)](#from-playground-to-arena-ie-the-cloud)
     - [Deploy on an AWS EC2 Instance](#deploy-on-an-aws-ec2-instance)
+      - [Single EC2 Instance Specs](#single-ec2-instance-specs)
+      - [Sandbox Setup Steps](#sandbox-setup-steps)
+      - [Sandbox Platform & Apps](#sandbox-platform--apps)
+      - [Sandbox: Start Instance after Stopping](#sandbox-start-instance-after-stopping)
   - [Development Notes (Step-by-Step)](#development-notes-step-by-step)
     - [Build: snack-order-commands (Write)](#build-snack-order-commands-write)
+      - [Step 1: Create a Spring Boot project with Gradle, Web, JPA, MySQL](#step-1-create-a-spring-boot-project-with-gradle-web-jpa-mysql)
+      - [Step 2: Create the Skeleton OrderController (REST endpoints)](#step-2-create-the-skeleton-ordercontroller-rest-endpoints)
+      - [Step 3: Build Components, Tests, Config](#step-3-build-components-tests-config)
     - [Build: snack-order-processor (DDD Aggregate)](#build-snack-order-processor-ddd-aggregate)
+      - [Step 1: Create the Spring Boot Base Project](#step-1-create-the-spring-boot-base-project)
+      - [Step 2: Create Skeleton Model](#step-2-create-skeleton-model)
+      - [Step 3: Configure Kafka and Streams](#step-3-configure-kafka-and-streams)
+      - [Step 4: Build Out Components, Tests](#step-4-build-out-components-tests)
+      - [Step 5: Setup Kafka Streams Topology Visualization](#step-5-setup-kafka-streams-topology-visualization)
     - [Build: snack-customer-orders (Read)](#build-snack-customer-orders-read)
+      - [Step 1: Create a Spring Boot project with Gradle, Web, MongoDB](#step-1-create-a-spring-boot-project-with-gradle-web-mongodb)
+      - [Step 2: Create the Skeleton OrderController (REST endpoints)](#step-2-create-the-skeleton-ordercontroller-rest-endpoints-1)
+      - [Step 3: Build Components, Tests, Config](#step-3-build-components-tests-config-1)
     - [Setup: Connectors](#setup-connectors)
+      - [Step 1: Debezium CDC Connector](#step-1-debezium-cdc-connector)
+      - [Step 2: MongoDB Sink Connector](#step-2-mongodb-sink-connector)
   - [Development Troubleshooting Notes](#development-troubleshooting-notes)
     - [UnsatisfiedDependencyException](#unsatisfieddependencyexception)
     - [Dependency error configuring in-memory database for @DataJpaTest](#dependency-error-configuring-in-memory-database-for-datajpatest)
@@ -473,6 +490,54 @@ OpenJDK 64-Bit Server VM Corretto-17.0.14.7.1 (build 17.0.14+7-LTS, mixed mode, 
 
 ```
 
+**Configure NGINX to Secure Next.js app with HTTPS**
+
+SSH into *demo-snacks-unlimited* EC2 instance.
+
+```
+Install nginx
+$ sudo yum install nginx -y
+
+Install Certbot (Let's Encrypt SSL tool)
+$ sudo yum install certbot python3-certbot-nginx -y
+```
+
+**Configure NGINX as reverse proxy. Edit `/etc/nginx/nginx.conf` and add location block:**
+
+```
+server {
+    listen 80;
+    server_name {your-domain.com};
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+```
+
+**Test**
+
+```
+$ sudo nginx -t
+$ sudo systemctl enable nginx
+$ sudo systemctl start nginx
+$ sudo systemctl reload nginx
+```
+
+**Get and Install SSL Cert**
+
+This only works IF you register a domain from a registrar such as Route53, Namecheap, GoDaddy, Google Domains.
+
+```
+$ sudo certbot --nginx -d your-domain.com -d {your-domain.com}
+```
+
 **Clone Snacks Unlimited Demo**
 
 ```
@@ -496,16 +561,50 @@ $ ./docker-clean
 
 **Startup the Platform and Apps**
 
+These are the combinations I found worked on this EC2 instance. Not sure why, but the Flink Job Manager had issues running the Flink SQL job with Redpanda as the broker. NOTE: All combinations worked fine on a Macbook using Docker Desktop. I suspect a network config but I have not looked into it.
+
 ```
-$ ./platform redpanda|kafka start
+Combo 1
+$ ./platform redpanda start
+$ ./apps start --kstreams
+
+Combo 2
+$ ./platform kafka start
+$ ./apps start --kstreams
+
+Combo 3
+$ ./platform kafka start
+$ ./apps start --flinksql
+
+Combo 4 (failed)
+$ ./platform redpanda start
+$ ./apps start --flinksql
 
 MySQL Source Connector and MongoDB Sink Connector
 $ ./platform init-connectors
 
-$ ./apps start --kstreams|--flinksql
 ```
 
-**Monitor Orders w/ FlinkSQL Client**
+#### Sandbox: Start Instance after Stopping
+
+
+**After Instance is Started**
+
+When stopping the EC2 Instance, on startup the following commands need to run to startup the apps and platforms.  SSH into the instance:
+
+```
+$ cd ~/demos/snacks-unlimited-demo/workspace
+
+Clean up to be safe
+$ ./platform redpanda|kafka stop
+$ ./apps stop
+$ ./docker-clean
+
+Start the Platform and Apps 
+(See startup combinations in previous section)
+```
+
+#### Monitor Orders w/ FlinkSQL Client
 
 ```
 $ ./apps cli flinksql
@@ -516,13 +615,6 @@ Flink SQL> select orderId, orderStatus, shippingLocation.customerName from custo
 // PAID customer order aggregates
 Flink SQL> select orderId, orderStatus, shippingLocation.customerName from customer_order_aggregate where orderStatus = 'PAID';
 ```
-
-
-
-
-
-
-
 
 ---
 
