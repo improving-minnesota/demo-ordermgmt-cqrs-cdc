@@ -42,7 +42,7 @@ public class CustomerOrderService {
         List<CustomerOrder> customerOrders = new ArrayList<>();
 
         List<CustomerOrderDocument> foundCustomerOrderDocuments =
-                customerOrderRepository.findByOrderStatusOrderByModifiedDateAsc(orderStatus.name());
+                customerOrderRepository.findByCustomerOrderOrderStatusOrderByCustomerOrderModifiedDateAsc(orderStatus.name());
 
         if (!ObjectUtils.isEmpty(foundCustomerOrderDocuments)) {
             foundCustomerOrderDocuments.forEach(customerOrderDocument -> {
@@ -59,7 +59,7 @@ public class CustomerOrderService {
         List<CustomerOrder> customerOrders = new ArrayList<>();
 
         List<CustomerOrderDocument> foundCustomerOrderDocuments = customerOrderRepository.
-                findTop20ByItemsItemNameContainingAndCreditCardTypeOrderByModifiedDateAsc(
+                findTop20ByCustomerOrderItemsItemNameContainingAndCustomerOrderPaymentCreditCardTypeOrderByCustomerOrderModifiedDateAsc(
                 "Snickers",
         "Magical Visa");
 
