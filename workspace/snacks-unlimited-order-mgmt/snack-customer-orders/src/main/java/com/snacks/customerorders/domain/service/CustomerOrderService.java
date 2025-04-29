@@ -41,7 +41,8 @@ public class CustomerOrderService {
         log.info("Entering CustomerOrderService.findOrderByOrderStatus() with orderStatus :: {}", orderStatus);
         List<CustomerOrder> customerOrders = new ArrayList<>();
 
-        List<CustomerOrderDocument> foundCustomerOrderDocuments = customerOrderRepository.findByCustomerOrderOrderStatus(orderStatus.name());
+        List<CustomerOrderDocument> foundCustomerOrderDocuments =
+                customerOrderRepository.findByOrderStatusOrderByModifiedDateAsc(orderStatus.name());
 
         if (!ObjectUtils.isEmpty(foundCustomerOrderDocuments)) {
             foundCustomerOrderDocuments.forEach(customerOrderDocument -> {
@@ -58,9 +59,9 @@ public class CustomerOrderService {
         List<CustomerOrder> customerOrders = new ArrayList<>();
 
         List<CustomerOrderDocument> foundCustomerOrderDocuments = customerOrderRepository.
-                findTop20ByCustomerOrderItemsItemNameContainingAndCustomerOrderPaymentCreditCardTypeOrderByCustomerOrderModifiedDateAsc(
-                        "Snickers",
-                "Magical Visa");
+                findTop20ByItemsItemNameContainingAndCreditCardTypeOrderByModifiedDateAsc(
+                "Snickers",
+        "Magical Visa");
 
         if (!ObjectUtils.isEmpty(foundCustomerOrderDocuments)) {
             foundCustomerOrderDocuments.forEach(customerOrderDocument -> {

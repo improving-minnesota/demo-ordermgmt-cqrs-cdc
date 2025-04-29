@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface CustomerOrderRepository extends MongoRepository<CustomerOrderDocument, String> {
 
-    List<CustomerOrderDocument> findByCustomerOrderOrderStatus(String orderStatus);
+    List<CustomerOrderDocument> findByOrderStatusOrderByModifiedDateAsc(String orderStatus);
 
-    List<CustomerOrderDocument> findTop20ByCustomerOrderItemsItemNameContainingAndCustomerOrderPaymentCreditCardTypeOrderByCustomerOrderModifiedDateAsc(String item, String creditCardType);
+    List<CustomerOrderDocument> findTop20ByItemsItemNameContainingAndCreditCardTypeOrderByModifiedDateAsc(String item, String creditCardType);
 }
