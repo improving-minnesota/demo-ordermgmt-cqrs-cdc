@@ -5,8 +5,8 @@
   "elements": [
     {
       "type": "image",
-      "version": 457,
-      "versionNonce": 1219293751,
+      "version": 458,
+      "versionNonce": 1406014303,
       "isDeleted": false,
       "id": "SOe_7xx4F_luWxQLgUwyC",
       "fillStyle": "solid",
@@ -28,7 +28,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1719743154102,
+      "updated": 1744682370572,
       "link": null,
       "locked": false,
       "status": "pending",
@@ -36,12 +36,14 @@
       "scale": [
         1,
         1
-      ]
+      ],
+      "index": "a0",
+      "crop": null
     },
     {
       "type": "text",
-      "version": 308,
-      "versionNonce": 772021065,
+      "version": 319,
+      "versionNonce": 1940779793,
       "isDeleted": false,
       "id": "xpP8i7hNIgmESPN9-3w3f",
       "fillStyle": "solid",
@@ -63,7 +65,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1720543073719,
+      "updated": 1744682392513,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -74,12 +76,14 @@
       "containerId": null,
       "originalText": "I wanted to build a working example \nto add to my \"playground\" that \nbuilds DDD Aggregates using CDC",
       "lineHeight": 1.25,
-      "baseline": 68
+      "baseline": 68,
+      "index": "a1",
+      "autoResize": true
     },
     {
       "type": "line",
-      "version": 1310,
-      "versionNonce": 551523159,
+      "version": 1311,
+      "versionNonce": 9588607,
       "isDeleted": false,
       "id": "N0WsasxM_OJHvn3oAi3nG",
       "fillStyle": "solid",
@@ -105,7 +109,7 @@
         "type": 2
       },
       "boundElements": [],
-      "updated": 1719743154102,
+      "updated": 1744682370572,
       "link": null,
       "locked": false,
       "startBinding": null,
@@ -150,12 +154,13 @@
           0,
           0
         ]
-      ]
+      ],
+      "index": "a2"
     },
     {
       "type": "line",
-      "version": 842,
-      "versionNonce": 219623833,
+      "version": 843,
+      "versionNonce": 1142664177,
       "isDeleted": false,
       "id": "ZJ7KNIAA_tRFx_VY-Ytqw",
       "fillStyle": "solid",
@@ -179,7 +184,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1719743154102,
+      "updated": 1744682370572,
       "link": null,
       "locked": false,
       "startBinding": null,
@@ -208,12 +213,13 @@
           0,
           0
         ]
-      ]
+      ],
+      "index": "a3"
     },
     {
       "type": "line",
-      "version": 414,
-      "versionNonce": 1482756215,
+      "version": 415,
+      "versionNonce": 1572472735,
       "isDeleted": false,
       "id": "glSql366xfxDeQAlzQ3t6",
       "fillStyle": "solid",
@@ -236,7 +242,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1719743154102,
+      "updated": 1744682370572,
       "link": null,
       "locked": false,
       "startBinding": null,
@@ -261,12 +267,13 @@
           3.870306033471934,
           -1.8835877660332017
         ]
-      ]
+      ],
+      "index": "a4"
     },
     {
       "type": "image",
-      "version": 1087,
-      "versionNonce": 1392863961,
+      "version": 1088,
+      "versionNonce": 2021852625,
       "isDeleted": false,
       "id": "da3IVnp7U994-2CRcJ73s",
       "fillStyle": "solid",
@@ -288,7 +295,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1719743154102,
+      "updated": 1744682370572,
       "link": null,
       "locked": false,
       "status": "pending",
@@ -296,12 +303,14 @@
       "scale": [
         1,
         1
-      ]
+      ],
+      "index": "a5",
+      "crop": null
     },
     {
       "type": "image",
-      "version": 659,
-      "versionNonce": 1518209847,
+      "version": 660,
+      "versionNonce": 158710719,
       "isDeleted": false,
       "id": "1R09vr4nk8j3NDhrjqMPF",
       "fillStyle": "solid",
@@ -323,7 +332,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1719743154102,
+      "updated": 1744682370572,
       "link": null,
       "locked": false,
       "status": "pending",
@@ -331,12 +340,14 @@
       "scale": [
         1,
         1
-      ]
+      ],
+      "index": "a6",
+      "crop": null
     },
     {
       "type": "text",
-      "version": 679,
-      "versionNonce": 945084871,
+      "version": 680,
+      "versionNonce": 1050944433,
       "isDeleted": false,
       "id": "fxpfd2gUUgdJWINUT-IFA",
       "fillStyle": "solid",
@@ -358,7 +369,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1720543073719,
+      "updated": 1744682370573,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -369,12 +380,14 @@
       "containerId": null,
       "originalText": "...Somehow I found this useful tutorial",
       "lineHeight": 1.25,
-      "baseline": 18
+      "baseline": 18,
+      "index": "a7",
+      "autoResize": true
     },
     {
       "type": "image",
-      "version": 654,
-      "versionNonce": 1797622871,
+      "version": 655,
+      "versionNonce": 132508639,
       "isDeleted": false,
       "id": "joe2wDUOAlG44laYp9K2k",
       "fillStyle": "solid",
@@ -396,7 +409,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1719743154102,
+      "updated": 1744682370573,
       "link": null,
       "locked": false,
       "status": "pending",
@@ -404,12 +417,14 @@
       "scale": [
         1,
         1
-      ]
+      ],
+      "index": "a8",
+      "crop": null
     },
     {
       "type": "image",
-      "version": 493,
-      "versionNonce": 848718329,
+      "version": 494,
+      "versionNonce": 1118209425,
       "isDeleted": false,
       "id": "sjD0BH_MYaPF0rhocGySk",
       "fillStyle": "solid",
@@ -431,7 +446,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1719743192236,
+      "updated": 1744682370573,
       "link": null,
       "locked": false,
       "status": "pending",
@@ -439,12 +454,14 @@
       "scale": [
         1,
         1
-      ]
+      ],
+      "index": "a9",
+      "crop": null
     },
     {
       "type": "text",
-      "version": 1167,
-      "versionNonce": 1196673577,
+      "version": 1168,
+      "versionNonce": 85661695,
       "isDeleted": false,
       "id": "ceFX0ckLHXJGefuHyad1G",
       "fillStyle": "solid",
@@ -467,7 +484,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1720543073720,
+      "updated": 1744682370573,
       "link": null,
       "locked": false,
       "fontSize": 20,
@@ -478,12 +495,14 @@
       "containerId": null,
       "originalText": "BUT I didn't want to stop there.\nI wanted to add more color.\nTurn it into a Solution Journey \nfrom \"domain story\" to \"working solution\"",
       "lineHeight": 1.25,
-      "baseline": 93
+      "baseline": 93,
+      "index": "aA",
+      "autoResize": true
     },
     {
       "type": "rectangle",
-      "version": 612,
-      "versionNonce": 1534918585,
+      "version": 613,
+      "versionNonce": 1069656945,
       "isDeleted": false,
       "id": "59aJt97Ty7PWzt1YWC5yl",
       "fillStyle": "solid",
@@ -517,14 +536,15 @@
           "type": "arrow"
         }
       ],
-      "updated": 1719743192236,
+      "updated": 1744682370573,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "aB"
     },
     {
       "type": "text",
-      "version": 724,
-      "versionNonce": 76096889,
+      "version": 725,
+      "versionNonce": 1461043231,
       "isDeleted": false,
       "id": "p0IAqxvHmvl8zyA_iFp3G",
       "fillStyle": "solid",
@@ -547,7 +567,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1719743192236,
+      "updated": 1744682370573,
       "link": null,
       "locked": false,
       "fontSize": 16.577236795977385,
@@ -558,12 +578,14 @@
       "containerId": "59aJt97Ty7PWzt1YWC5yl",
       "originalText": "Context",
       "lineHeight": 1.25,
-      "baseline": 16
+      "baseline": 16,
+      "index": "aC",
+      "autoResize": true
     },
     {
       "type": "rectangle",
-      "version": 691,
-      "versionNonce": 1729629785,
+      "version": 692,
+      "versionNonce": 507319633,
       "isDeleted": false,
       "id": "Gk-EtvXPp-0atejD5XnzO",
       "fillStyle": "solid",
@@ -597,14 +619,15 @@
           "type": "arrow"
         }
       ],
-      "updated": 1719743192236,
+      "updated": 1744682370573,
       "link": null,
-      "locked": false
+      "locked": false,
+      "index": "aD"
     },
     {
       "type": "text",
-      "version": 803,
-      "versionNonce": 1483279385,
+      "version": 804,
+      "versionNonce": 1069966399,
       "isDeleted": false,
       "id": "58ET7hEcqq4TM0Gzbxj3V",
       "fillStyle": "solid",
@@ -627,7 +650,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1719743192236,
+      "updated": 1744682370573,
       "link": null,
       "locked": false,
       "fontSize": 16.577236795977385,
@@ -638,12 +661,14 @@
       "containerId": "Gk-EtvXPp-0atejD5XnzO",
       "originalText": "Code",
       "lineHeight": 1.25,
-      "baseline": 16
+      "baseline": 16,
+      "index": "aE",
+      "autoResize": true
     },
     {
       "type": "arrow",
-      "version": 1661,
-      "versionNonce": 385068375,
+      "version": 1662,
+      "versionNonce": 1366311729,
       "isDeleted": false,
       "id": "SLItYGT1oUhT7Cu7lgUwd",
       "fillStyle": "solid",
@@ -668,7 +693,7 @@
         "type": 2
       },
       "boundElements": [],
-      "updated": 1719743192389,
+      "updated": 1744682370573,
       "link": null,
       "locked": false,
       "startBinding": {
@@ -693,12 +718,13 @@
           118.31807992738035,
           0.653619077771081
         ]
-      ]
+      ],
+      "index": "aF"
     },
     {
       "type": "text",
-      "version": 1304,
-      "versionNonce": 1615071463,
+      "version": 2071,
+      "versionNonce": 9531729,
       "isDeleted": false,
       "id": "SJUPJZqqZ8SRIAkJjCkkG",
       "fillStyle": "solid",
@@ -707,34 +733,36 @@
       "roughness": 1,
       "opacity": 100,
       "angle": 0,
-      "x": 133.13333540188341,
+      "x": 133.39896040188341,
       "y": 722.3568115234375,
       "strokeColor": "#1971c2",
       "backgroundColor": "#b2f2bb",
-      "width": 1578.63720703125,
+      "width": 1587.5440673828125,
       "height": 62.74330139160165,
       "seed": 358938807,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1720543073721,
+      "updated": 1744896189546,
       "link": null,
       "locked": false,
       "fontSize": 25.09732055664066,
       "fontFamily": 1,
-      "text": "The RESULT: A course/talk walking through a solution process, complete with running software in a local Docker playground :-)\n              An added bonus with it being an integrated solution with CQRS using CDC & Kafka. ",
+      "text": "The RESULT: A lighthearted solution walkthrough - packed with methods and diagrams - leading to demoable, running software \n              implementing the CQRS pattern, powered by CDC and Kafka in a local Dockerized Playground. ",
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "The RESULT: A course/talk walking through a solution process, complete with running software in a local Docker playground :-)\n              An added bonus with it being an integrated solution with CQRS using CDC & Kafka. ",
+      "originalText": "The RESULT: A lighthearted solution walkthrough - packed with methods and diagrams - leading to demoable, running software \n              implementing the CQRS pattern, powered by CDC and Kafka in a local Dockerized Playground. ",
       "lineHeight": 1.25,
-      "baseline": 53
+      "baseline": 53,
+      "index": "aG",
+      "autoResize": true
     },
     {
       "type": "image",
-      "version": 979,
-      "versionNonce": 360834295,
+      "version": 1005,
+      "versionNonce": 419625905,
       "isDeleted": false,
       "id": "0u0N5s_BQqai3PSBW-gBJ",
       "fillStyle": "solid",
@@ -743,8 +771,8 @@
       "roughness": 1,
       "opacity": 100,
       "angle": 0,
-      "x": 176.0395736694336,
-      "y": 752.8153381347656,
+      "x": 178.24263763427734,
+      "y": 781.0732116699219,
       "strokeColor": "transparent",
       "backgroundColor": "#b2f2bb",
       "width": 75.95756530761716,
@@ -754,7 +782,7 @@
       "frameId": null,
       "roundness": null,
       "boundElements": [],
-      "updated": 1719744080330,
+      "updated": 1744896206931,
       "link": null,
       "locked": false,
       "status": "pending",
@@ -762,11 +790,75 @@
       "scale": [
         1,
         1
-      ]
+      ],
+      "index": "aH",
+      "crop": null
+    },
+    {
+      "id": "PPhyEWe5WGUf7_AHYSCGr",
+      "type": "rectangle",
+      "x": 935.8040622379051,
+      "y": 723.7815417077527,
+      "width": 278.14215087890625,
+      "height": 31.068969726562482,
+      "angle": 0,
+      "strokeColor": "#e03131",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "aI",
+      "roundness": {
+        "type": 3
+      },
+      "seed": 181553247,
+      "version": 179,
+      "versionNonce": 167619423,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1744896141474,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "PegzO9GTkuhlNYW-VDnYV",
+      "type": "rectangle",
+      "x": 1376.0202792789207,
+      "y": 722.6413439538464,
+      "width": 335.0000610351562,
+      "height": 31.068969726562482,
+      "angle": 0,
+      "strokeColor": "#e03131",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "aJ",
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1297388529,
+      "version": 252,
+      "versionNonce": 1685608607,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1744896150696,
+      "link": null,
+      "locked": false
     }
   ],
   "appState": {
-    "gridSize": null,
+    "gridSize": 20,
+    "gridStep": 5,
+    "gridModeEnabled": false,
     "viewBackgroundColor": "#ffffff"
   },
   "files": {

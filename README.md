@@ -20,6 +20,7 @@
   - [Playground Environment](#playground-environment)
     - [Kafka-backed Playground](#kafka-backed-playground)
     - [Redpanda-backed Playground](#redpanda-backed-playground)
+    - [Warpstream-backed Playground](#warpstream-backed-playground)
     - [Spinning up Playground "Platform"](#spinning-up-playground-platform)
     - [Spinning up Playground "Apps"](#spinning-up-playground-apps)
     - [Stop and Clean the Playground](#stop-and-clean-the-playground)
@@ -35,6 +36,7 @@
       - [Sandbox Setup Steps](#sandbox-setup-steps)
       - [Sandbox Platform & Apps](#sandbox-platform--apps)
       - [Sandbox: Start Instance after Stopping](#sandbox-start-instance-after-stopping)
+      - [Monitor Orders w/ FlinkSQL Client](#monitor-orders-w-flinksql-client)
   - [Development Notes (Step-by-Step)](#development-notes-step-by-step)
     - [Build: snack-order-commands (Write)](#build-snack-order-commands-write)
       - [Step 1: Create a Spring Boot project with Gradle, Web, JPA, MySQL](#step-1-create-a-spring-boot-project-with-gradle-web-jpa-mysql)
@@ -187,6 +189,13 @@ using CQRS with CDC and Kadka.
 ### Redpanda-backed Playground
 ![](docs/images/playground-redpanda.png)
 
+### Warpstream-backed Playground
+
+* Get started [Install Warpstream Agent](https://docs.warpstream.com/warpstream/getting-started/install-the-warpstream-agent)
+
+* [Warpstream docker Compose](https://docs.warpstream.com/warpstream/reference/integrations/use-the-agent-in-docker-compose)
+
+
 ### Spinning up Playground "Platform"
 
 The "platform" consists of:
@@ -207,11 +216,11 @@ $ cd ./workspace
 **Start and Stop the Platform**
 
 ```
-$ ./platform kafka|redpanda start
+$ ./platform kafka|redpanda|warpstream start
 ```
 
 ```
-$ ./platform kafka|redpanda stop
+$ ./platform kafka|redpanda|warpstream stop
 ```
 
 **Create the MySQL source and MongoDB sink Kafka Connectors**

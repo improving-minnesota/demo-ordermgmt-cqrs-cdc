@@ -4,8 +4,8 @@
 echoCommands() {
   echo ""
 	echo "Usage:  These are valid commands"
-  echo "platform kafka|redpanda start"
-  echo "platform kafka|redpanda stop"
+  echo "platform kafka|redpanda|warpstream start"
+  echo "platform kafka|redpanda|warpstream stop"
   echo "platform init-connectors"
   echo ""
 }
@@ -24,6 +24,14 @@ startRedpanda() {
 
 stopRedpanda() {
   docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-redpanda.yml --file ./docker/docker-compose-flink.yml --project-name platform down -v
+}
+
+startWarpstream() {
+  docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-warpstream.yml --file ./docker/docker-compose-flink.yml --project-name platform up -d
+}
+
+stopWarpstream() {
+  docker compose --file ./docker/docker-compose-datastores.yml --file ./docker/docker-compose-warpstream.yml --file ./docker/docker-compose-flink.yml --project-name platform down -v
 }
 
 initConnectors() {
@@ -88,10 +96,14 @@ elif [[ $1 == "kafka" ]] && [[ $2 == "start" ]]; then
 		startKafka
 elif [[ $1 == "redpanda" ]] && [[ $2 == "start" ]]; then
 		startRedpanda
+elif [[ $1 == "warpstream" ]] && [[ $2 == "start" ]]; then
+		startWarpstream
 elif [[ $1 == "kafka" ]] && [[ $2 == "stop" ]]; then
 		stopKafka
 elif [[ $1 == "redpanda" ]] && [[ $2 == "stop" ]]; then
 		stopRedpanda
+elif [[ $1 == "warpstream" ]] && [[ $2 == "stop" ]]; then
+    stopWarpstream
 elif [[ $1 == "init-connectors" ]]; then
 		initConnectors
 else

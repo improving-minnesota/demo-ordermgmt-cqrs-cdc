@@ -1,0 +1,169 @@
+networks:
+  datastreaming:
+    name: datastreaming
+  datastores:
+    name: datastores
+
+services:
+# WARPSTREAM COMPONENTS (PLATFORM)
+# Warpstream Schema Registry default is port 9094. Changed to 8081 for plug & play of the
+# Snacks Unlimited Playground
+  warpstream:
+    image: public.ecr.aws/warpstream-labs/warpstream_agent:latest
+    container_name: broker
+    networks:
+      - datastreaming
+    ports:
+      - "8080:8080"
+      - "29092:29092"
+      - "8081:8081"
+    environment:
+      # this is a no-op as it will default on the custom advertised hostname defined above, but you can change this if you want to use a different hostname with Kafka
+      - WARPSTREAM_DISCOVERY_KAFKA_HOSTNAME_OVERRIDE=broker
+    command:
+      - playground
+      - -advertiseHostnameStrategy
+      - custom
+      - -advertiseHostnameCustom
+      - broker
+      - -kafkaPort
+      - "29092"
+      - -schemaRegistryPort
+      - "8081"
+    healthcheck:
+      # Wait for the Agent to finish setting up the demo before marking it as healthy
+      # to delay the diagnose-connection command from running for a few seconds.
+      test: [ "CMD", "sh", "-c", "sleep 10" ]
+      interval: 5s
+      timeout: 15s
+      retries: 5
+
+  warp-diagnose:
+    image: public.ecr.aws/warpstream-labs/warpstream_agent:latest
+    networks:
+      - datastreaming
+    command:
+      - kcmd
+      - -bootstrap-host
+      - broker
+      - -bootstrap-port
+      - "29092"
+      - -type
+      - diagnose-connection
+    depends_on:
+      warpstream:
+        condition: service_healthy
+
+# Create initial topics to support the Snack Order Processor
+# When using Flink SQL, these topics need to be created before creating the job.
+  create-topic-item-detail:
+    image: public.ecr.aws/warpstream-labs/warpstream_agent:latest
+    networks:
+      - datastreaming
+    command:
+      - kcmd
+      - -bootstrap-host
+      - broker
+      - -bootstrap-port
+      - "29092"
+      - -type
+      - create-topic
+      - -topic
+      - order-command-server.order-command-db.item_detail
+    depends_on:
+      warpstream:
+        condition: service_healthy
+  create-topic-payment:
+    image: public.ecr.aws/warpstream-labs/warpstream_agent:latest
+    networks:
+      - datastreaming
+    command:
+      - kcmd
+      - -bootstrap-host
+      - broker
+      - -bootstrap-port
+      - "29092"
+      - -type
+      - create-topic
+      - -topic
+      - order-command-server.order-command-db.payment
+    depends_on:
+      warpstream:
+        condition: service_healthy
+  create-topic-shipping-location:
+    image: public.ecr.aws/warpstream-labs/warpstream_agent:latest
+    networks:
+      - datastreaming
+    command:
+      - kcmd
+      - -bootstrap-host
+      - broker
+      - -bootstrap-port
+      - "29092"
+      - -type
+      - create-topic
+      - -topic
+      - order-command-server.order-command-db.shipping_location
+    depends_on:
+      warpstream:
+        condition: service_healthy
+  create-topic-customer-order-aggregate:
+    image: public.ecr.aws/warpstream-labs/warpstream_agent:latest
+    networks:
+      - datastreaming
+    command:
+      - kcmd
+      - -bootstrap-host
+      - broker
+      - -bootstrap-port
+      - "29092"
+      - -type
+      - create-topic
+      - -topic
+      - customer-order-aggregate
+    depends_on:
+      warpstream:
+        condition: service_healthy
+
+
+  # Kafka Connect
+  connect:
+    image: cnfldemos/cp-server-connect-datagen:0.6.4-7.6.0
+    hostname: connect
+    container_name: connect
+    networks:
+      - datastreaming
+      - datastores
+    depends_on:
+      warpstream:
+        condition: service_healthy
+      mysql_db_server:
+        condition: service_healthy
+      mongodb_server:
+        condition: service_healthy
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./kafka-connectors:/usr/share/confluent-hub-components
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: 'broker:29092'
+      CONNECT_REST_ADVERTISED_HOST_NAME: connect
+      CONNECT_GROUP_ID: compose-connect-group
+      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://broker:8081
+      # CLASSPATH required due to CC-2422
+      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-7.6.0.jar
+      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+      CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
