@@ -38,8 +38,9 @@ Both process event streams. Kafka Streams offers low-latency, embedded stream pr
 Kafka and Redpanda are both event streaming platforms, but Redpanda is a Kafka API-compatible alternative written in C++ with no Java dependency, offering lower latency and better performance on modern hardware. Unlike Kafka, Redpanda claims to have a simpler architecture and is optimized for single-binary deployment and ease of use (SMALLER FOOTPRINT). 
 
 **9b. What is the difference between Kafka and Warpstream in two sentences?**
-Kafka is a distributed event streaming platform that stores and processes high-throughput real-time data streams using a self-managed or cloud-hosted cluster. WarpStream is a Kafka-compatible streaming platform that decouples storage and compute, using object storage like S3 to reduce infrastructure cost and simplify scaling.
+Kafka is a distributed event streaming platform that stores and processes high-throughput real-time data streams using a self-managed or cloud-hosted cluster. WarpStream is a Kafka-compatible streaming platform that **decouples storage and compute**, using object storage like S3 to reduce infrastructure cost and simplify scaling.
 
+Unlike Kafka, WarpStream doesn't require brokers or ZooKeeper for cluster management. The single Agent handles all coordination. WarpStream Agents are stateless, meaning they don't maintain any state on their local storage. This allows for easy scaling and deployment. WarpStream offloads all storage to object storage, which means there's no need for local disks on the Agents. This further simplifies operations and reduces costs. 
 
 **10. How is observability achieved?**
 We can use OpenTelemetry with centralized logging (Elastic/Datadog), distributed tracing, and Kafka metrics for performance and failure analysis.
