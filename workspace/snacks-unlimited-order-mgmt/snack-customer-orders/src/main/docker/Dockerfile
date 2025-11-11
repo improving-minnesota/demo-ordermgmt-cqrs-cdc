@@ -1,4 +1,4 @@
-FROM amazoncorretto:17-alpine
+FROM amazoncorretto:21-alpine
 LABEL maintainer="Torey Lomenda"
 
 ARG JAR_FILE=build/libs/snack-customer-orders-*-SNAPSHOT.jar
