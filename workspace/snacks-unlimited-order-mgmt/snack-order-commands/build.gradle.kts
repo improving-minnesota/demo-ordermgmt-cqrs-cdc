@@ -1,8 +1,9 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.3.1"
-	id("io.spring.dependency-management") version "1.1.5"
-	id("com.palantir.docker") version "0.36.0"
+	id("org.springframework.boot") version "3.3.5"
+	id("io.spring.dependency-management") version "1.1.6"
+//	id("com.palantir.docker") version "0.36.0"
+    id("com.google.cloud.tools.jib") version "3.4.5"
 }
 
 group = "com.example.snacks"
@@ -17,10 +18,38 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-docker {
-	name = "tlapps/play/snack-order-commands:snapshot"
-	setDockerfile(file("src/main/docker/Dockerfile"))
-	copySpec.from("build").into("build")
+//docker {
+//	name = "tlapps/play/snack-order-commands:snapshot"
+//	setDockerfile(file("src/main/docker/Dockerfile"))
+//	copySpec.from("build").into("build")
+//}
+
+jib {
+    from {
+        image = "amazoncorretto:21-alpine"
+        platforms {
+            // Build for both ARM64 and AMD64
+            platform {
+                architecture = "amd64"
+                os = "linux"
+            }
+            platform {
+                architecture = "arm64"
+                os = "linux"
+            }
+        }
+    }
+    to {
+        image = "tlapps/play/snack-order-commands"
+        tags = setOf("snapshot")
+
+    }
+    container {
+        labels = mapOf("maintainer" to "Torey Lomenda")
+        creationTime.set("USE_CURRENT_TIMESTAMP")
+
+        entrypoint = listOf("sh", "-c", "exec java \$JAVA_OPTS -cp @/app/jib-classpath-file com.snacks.ordercommands.SnackOrderCommandsApplication")
+    }
 }
 
 repositories {
@@ -44,11 +73,17 @@ tasks {
 		useJUnitPlatform()
 	}
 
-	dockerPrepare.configure {
-		dependsOn(bootJar.name, test, jar, dockerfileZip)
-	}
+//	dockerPrepare.configure {
+//		dependsOn(bootJar.name, test, jar, dockerfileZip)
+//	}
+//
+//	docker.configure {
+//		dependsOn(build)
+//	}
+}
 
-	docker.configure {
-		dependsOn(build)
-	}
+tasks.register("docker") {
+    group = "build"
+    description = "Builds the Docker image locally using Jib"
+    dependsOn("jibDockerBuild")
 }
