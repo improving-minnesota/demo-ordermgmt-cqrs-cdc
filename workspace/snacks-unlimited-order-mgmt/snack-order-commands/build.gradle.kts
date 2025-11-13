@@ -2,7 +2,6 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.3.5"
 	id("io.spring.dependency-management") version "1.1.6"
-//	id("com.palantir.docker") version "0.36.0"
     id("com.google.cloud.tools.jib") version "3.4.5"
 }
 
@@ -18,12 +17,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-//docker {
-//	name = "tlapps/play/snack-order-commands:snapshot"
-//	setDockerfile(file("src/main/docker/Dockerfile"))
-//	copySpec.from("build").into("build")
-//}
-
+// Docker image
 jib {
     from {
         image = "amazoncorretto:21-alpine"
@@ -72,14 +66,6 @@ tasks {
 	withType<Test> {
 		useJUnitPlatform()
 	}
-
-//	dockerPrepare.configure {
-//		dependsOn(bootJar.name, test, jar, dockerfileZip)
-//	}
-//
-//	docker.configure {
-//		dependsOn(build)
-//	}
 }
 
 tasks.register("docker") {
