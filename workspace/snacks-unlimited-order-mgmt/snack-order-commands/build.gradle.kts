@@ -1,8 +1,8 @@
 plugins {
-	java
-	id("org.springframework.boot") version "3.3.5"
-	id("io.spring.dependency-management") version "1.1.6"
-    id("com.google.cloud.tools.jib") version "3.4.5"
+  java
+  id("org.springframework.boot") version "4.0.0"
+  id("io.spring.dependency-management") version "1.1.7"
+  id("com.google.cloud.tools.jib") version "3.5.3"
 }
 
 group = "com.example.snacks"
@@ -10,17 +10,17 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(25)
 	}
 
-	sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 // Docker image
 jib {
     from {
-        image = "amazoncorretto:21-alpine"
+        image = "amazoncorretto:25-alpine"
         platforms {
             // Build for both ARM64 and AMD64
             platform {
@@ -57,6 +57,7 @@ dependencies {
 	runtimeOnly("com.mysql:mysql-connector-j")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
 	testImplementation("com.h2database:h2")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")

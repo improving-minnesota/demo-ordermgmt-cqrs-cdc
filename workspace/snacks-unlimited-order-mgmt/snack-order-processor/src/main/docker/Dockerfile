@@ -1,5 +1,5 @@
-# amazoncorretto:21 is used to safely run Kafka Streams Java applications
-FROM amazoncorretto:21
+# amazoncorretto:25 is used to safely run Kafka Streams Java applications
+FROM amazoncorretto:25-alpine
 LABEL maintainer="Torey Lomenda"
 
 ARG JAR_FILE=build/libs/snack-order-processor-*-SNAPSHOT.jar
