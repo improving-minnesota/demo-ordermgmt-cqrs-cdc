@@ -491,12 +491,11 @@ $ curl -SL https://github.com/docker/compose/releases/download/v2.24.1/docker-co
 $ docker compose version
 
 Install Java
-$ sudo dnf install -y java-17-amazon-corretto
+$ sdk dnf install -y java-25-amazon-corretto
 
 $ java --version
-OpenJDK Runtime Environment Corretto-17.0.14.7.1 (build 17.0.14+7-LTS)
-OpenJDK 64-Bit Server VM Corretto-17.0.14.7.1 (build 17.0.14+7-LTS, mixed mode, sharing)
-
+OpenJDK Runtime Environment Corretto-25.0.2 (build 25.0.2+10-LTS)
+OpenJDK 64-Bit Server VM Corretto-25.0.2 (build 25.0.2+10-LTS, mixed mode, sharing)
 ```
 
 **Configure NGINX to Secure Next.js app with HTTPS**
