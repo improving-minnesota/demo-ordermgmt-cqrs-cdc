@@ -1,9 +1,7 @@
 package com.snacks.orderprocessor.stream;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import com.snacks.orderprocessor.model.domain.CustomerOrder;
 import com.snacks.orderprocessor.model.domain.ItemDetail;
 import com.snacks.orderprocessor.model.domain.Payment;
@@ -44,7 +42,7 @@ import java.util.stream.IntStream;
 
 @Service
 public class CustomerOrderAggregateStream {
-    
+
     private static final Logger log = LoggerFactory.getLogger(CustomerOrderAggregateStream.class);
 
     // region SERDE (Serialize/Deserialize properties)
@@ -195,42 +193,29 @@ public class CustomerOrderAggregateStream {
     private String parseOrderId(String orderIdJson) {
         String orderId = null;
 
-        try {
-            JsonNode keyNode = objectMapper.readTree(orderIdJson);
-            JsonNode objectIdNode = keyNode.at("/payload/order_id");
+        JsonNode keyNode = objectMapper.readTree(orderIdJson);
+        JsonNode objectIdNode = keyNode.at("/payload/order_id");
 
-            orderId = objectIdNode.asText();
-        } catch (JsonMappingException e) {
-            log.error("JsonMappingException: ", e);
-        } catch (JsonProcessingException e) {
-            log.error("JsonProcessingException: ", e);
-        }
+        orderId = objectIdNode.asText();
 
         return orderId;
     }
 
     private ItemDetailRecord parseOrderItem(String itemJson) {
         ItemDetailRecord item = null;
-        try {
-            JsonNode orderItemRoot = objectMapper.readTree(itemJson);
 
-            JsonNode payloadNode = orderItemRoot.get("payload");
+        JsonNode orderItemRoot = objectMapper.readTree(itemJson);
+        JsonNode payloadNode = orderItemRoot.get("payload");
 
-            String itemId = payloadNode.get("item_id").asText();
-            String itemName = payloadNode.get("item_name").asText();
-            String itemStatus = payloadNode.get("item_status").asText();
-            Double price = payloadNode.get("price").asDouble(0);
-            Integer quantity = payloadNode.get("quantity").asInt(0);
+        String itemId = payloadNode.get("item_id").asText();
+        String itemName = payloadNode.get("item_name").asText();
+        String itemStatus = payloadNode.get("item_status").asText();
+        Double price = payloadNode.get("price").asDouble(0);
+        Integer quantity = payloadNode.get("quantity").asInt(0);
 
-            item = new ItemDetailRecord(itemId, itemName, itemStatus, price, quantity);
+        item = new ItemDetailRecord(itemId, itemName, itemStatus, price, quantity);
 
-            log.info("Item Detail Status :: INT {} :: ENUM {}.", itemStatus, ItemStatus.values()[Integer.parseInt(itemStatus)]);
-
-        } catch (JsonMappingException e) {
-            log.error("JsonMappingException: ", e);
-        } catch (JsonProcessingException e) {
-            log.error("JsonProcessingException: ", e);
-        }
+        log.info("Item Detail Status :: INT {} :: ENUM {}.", itemStatus, ItemStatus.values()[Integer.parseInt(itemStatus)]);
 
         return item;
     }
@@ -238,23 +223,16 @@ public class CustomerOrderAggregateStream {
     private ShippingLocationRecord parseShippingLocation(String shippingLocationJson) {
         ShippingLocationRecord shippingLocationRecord = null;
 
-        try {
-            JsonNode shippingLocationRoot = objectMapper.readTree(shippingLocationJson);
-            JsonNode payloadNode = shippingLocationRoot.get("payload");
-            String orderId = payloadNode.get("order_id").asText();
-            String customerAddress = payloadNode.get("customer_address").asText();
-            String customerName = payloadNode.get("customer_name").asText();
-            String zipCode = payloadNode.get("zip_code").asText();
-            Double latitude = payloadNode.get("latitude").asDouble();
-            Double longitude = payloadNode.get("longitude").asDouble();
+        JsonNode shippingLocationRoot = objectMapper.readTree(shippingLocationJson);
+        JsonNode payloadNode = shippingLocationRoot.get("payload");
+        String orderId = payloadNode.get("order_id").asText();
+        String customerAddress = payloadNode.get("customer_address").asText();
+        String customerName = payloadNode.get("customer_name").asText();
+        String zipCode = payloadNode.get("zip_code").asText();
+        Double latitude = payloadNode.get("latitude").asDouble();
+        Double longitude = payloadNode.get("longitude").asDouble();
 
-            shippingLocationRecord = new ShippingLocationRecord(orderId, customerName, customerAddress, zipCode, latitude, longitude);
-
-        } catch (JsonMappingException e) {
-            log.error("JsonMappingException: ", e);
-        } catch (JsonProcessingException e) {
-            log.error("JsonProcessingException: ", e);
-        }
+        shippingLocationRecord = new ShippingLocationRecord(orderId, customerName, customerAddress, zipCode, latitude, longitude);
 
         return shippingLocationRecord;
     }
@@ -262,22 +240,15 @@ public class CustomerOrderAggregateStream {
     private PaymentRecord parsePayment(String paymentJson) {
         PaymentRecord paymentRecord = null;
 
-        try {
-            JsonNode paymentRoot = objectMapper.readTree(paymentJson);
-            JsonNode payloadNode = paymentRoot.get("payload");
-            String orderId = payloadNode.get("order_id").asText();
-            String paymentType = payloadNode.get("payment_type").asText();
-            String creditCardType = payloadNode.get("credit_card_type").asText();
-            String creditCardNumber = payloadNode.get("credit_card_number").asText();
-            Double amount = payloadNode.get("amount").asDouble();
+        JsonNode paymentRoot = objectMapper.readTree(paymentJson);
+        JsonNode payloadNode = paymentRoot.get("payload");
+        String orderId = payloadNode.get("order_id").asText();
+        String paymentType = payloadNode.get("payment_type").asText();
+        String creditCardType = payloadNode.get("credit_card_type").asText();
+        String creditCardNumber = payloadNode.get("credit_card_number").asText();
+        Double amount = payloadNode.get("amount").asDouble();
 
-            paymentRecord = new PaymentRecord(orderId, paymentType, creditCardType, creditCardNumber, amount);
-
-        } catch (JsonMappingException e) {
-            log.error("JsonMappingException: ", e);
-        } catch (JsonProcessingException e) {
-            log.error("JsonProcessingException: ", e);
-        }
+        paymentRecord = new PaymentRecord(orderId, paymentType, creditCardType, creditCardNumber, amount);
 
         return paymentRecord;
     }

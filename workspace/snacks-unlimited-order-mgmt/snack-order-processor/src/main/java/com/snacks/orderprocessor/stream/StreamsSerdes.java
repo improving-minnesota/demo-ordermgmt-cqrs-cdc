@@ -1,14 +1,14 @@
 package com.snacks.orderprocessor.stream;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.snacks.orderprocessor.model.domain.CustomerOrder;
 import com.snacks.orderprocessor.model.inbound.ItemDetailRecord;
 import com.snacks.orderprocessor.model.inbound.PaymentRecord;
 import com.snacks.orderprocessor.model.inbound.ShippingLocationRecord;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
+import tools.jackson.core.type.TypeReference;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ public class StreamsSerdes extends Serdes {
 
 	public static final class ItemDetailRecordSerde extends WrapperSerde<ItemDetailRecord> {
 		public ItemDetailRecordSerde() {
-			super(new JsonSerializer<>(), new JsonDeserializer<>(ItemDetailRecord.class, false));
+			super(new JacksonJsonSerializer<>(), new JacksonJsonDeserializer<>(ItemDetailRecord.class, false));
 		}
 	}
 
@@ -29,8 +29,9 @@ public class StreamsSerdes extends Serdes {
 	}
 
 	public static final class ItemDetailRecordArrayListSerde extends WrapperSerde<ArrayList<ItemDetailRecord>> {
+
 		public ItemDetailRecordArrayListSerde() {
-			super(new JsonSerializer<>(), new JsonDeserializer<>(new TypeReference<ArrayList<ItemDetailRecord>>() {}, false));
+			super(new JacksonJsonSerializer<>(), new JacksonJsonDeserializer<>(new TypeReference<ArrayList<ItemDetailRecord>>() {}, false));
 		}
 	}
 
@@ -40,7 +41,7 @@ public class StreamsSerdes extends Serdes {
 
 	public static final class ShippingLocationRecordSerde extends WrapperSerde<ShippingLocationRecord> {
 		public ShippingLocationRecordSerde() {
-			super(new JsonSerializer<>(), new JsonDeserializer<>(ShippingLocationRecord.class, false));
+			super(new JacksonJsonSerializer<>(), new JacksonJsonDeserializer<>(ShippingLocationRecord.class, false));
 		}
 	}
 
@@ -50,7 +51,7 @@ public class StreamsSerdes extends Serdes {
 
 	public static final class PaymentRecordSerde extends WrapperSerde<PaymentRecord> {
 		public PaymentRecordSerde() {
-			super(new JsonSerializer<>(), new JsonDeserializer<>(PaymentRecord.class, false));
+			super(new JacksonJsonSerializer<>(), new JacksonJsonDeserializer<>(PaymentRecord.class, false));
 		}
 	}
 
@@ -60,7 +61,7 @@ public class StreamsSerdes extends Serdes {
 
 	public static final class CustomerOrderSerde extends WrapperSerde<CustomerOrder> {
 		public CustomerOrderSerde() {
-			super(new JsonSerializer<>(), new JsonDeserializer<>(CustomerOrder.class, false));
+			super(new JacksonJsonSerializer<>(), new JacksonJsonDeserializer<>(CustomerOrder.class, false));
 		}
 	}
 

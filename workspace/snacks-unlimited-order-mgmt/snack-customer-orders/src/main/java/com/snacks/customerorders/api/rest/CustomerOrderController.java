@@ -37,7 +37,7 @@ public class CustomerOrderController {
             return new ResponseEntity<>(customerOrder, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/api/orders")
